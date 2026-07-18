@@ -1,0 +1,62 @@
+<div class="page-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Turnos</h2>
+    <a routerLink="/admin/turnos/nuevo" class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-lg"></i> Nuevo
+    </a>
+  </div>
+
+  <div class="filtro-tabs">
+    <button class="filtro-btn" [class.active]="filtro === 'activos'" (click)="setFiltro('activos')">
+      Activos <span class="filtro-count">{{ contarActivos() }}</span>
+    </button>
+    <button class="filtro-btn" [class.active]="filtro === 'hoy'" (click)="setFiltro('hoy')">Hoy</button>
+    <button class="filtro-btn" [class.active]="filtro === 'semana'" (click)="setFiltro('semana')">Semana</button>
+    <button class="filtro-btn" [class.active]="filtro === 'todos'" (click)="setFiltro('todos')">Todos</button>
+  </div>
+
+  @if (grupos.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-clock-history"></i>
+      <p>Sin turnos para mostrar</p>
+    </div>
+  } @else {
+    @for (grupo of grupos; track grupo.fecha) {
+      <div class="dia-group">
+        <div class="dia-label" [class.dia-hoy]="grupo.esHoy">
+          @if (grupo.esHoy) {
+            <span class="dia-hoy-dot"></span>
+          }
+          {{ grupo.label }}
+          <span class="dia-count">{{ grupo.turnos.length }}</span>
+        </div>
+        <div class="turnos-list">
+          @for (turno of grupo.turnos; track turno.id) {
+            <div class="turno-card" [class.turno-cancelado]="turno.estado === 'CANCELADO'" [class.turno-finalizado]="turno.estado === 'FINALIZADO'">
+              <div class="turno-left">
+                <div class="turno-time">{{ formatearHora(turno.horaInicio) }}</div>
+                <div class="turno-time-end">{{ formatearHora(turno.horaFin) }}</div>
+              </div>
+              <div class="turno-divider"></div>
+              <div class="turno-right">
+                <div class="turno-top">
+                  <span class="turno-cliente">{{ turno.Cliente?.nombre || '-' }}</span>
+                  <span [class]="claseEstado(turno.estado)">{{ turno.estado }}</span>
+                </div>
+                <div class="turno-servicio">{{ getServicios(turno) }}</div>
+                @if (turno.costoAdicional && turno.costoAdicional > 0) {
+                  <div class="turno-extra">+ {{ formatearPrecio(turno.costoAdicional) }} (adicional)</div>
+                }
+                @if (turno.estado !== 'CANCELADO' && turno.estado !== 'FINALIZADO') {
+                  <button class="turno-cancel-btn" (click)="cancelarTurno(turno)">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

@@ -1,0 +1,100 @@
+<div class="page-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Disponibilidad</h2>
+    <button class="btn btn-primary btn-sm" (click)="descargarImagen()" [disabled]="generando || cargando">
+      @if (generando) {
+        <span class="spinner-border spinner-border-sm"></span>
+      } @else {
+        <i class="bi bi-download"></i>
+      }
+      Descargar
+    </button>
+  </div>
+
+  @if (cargando) {
+    <div class="text-center py-5">
+      <div class="spinner-border" style="color: var(--primary)"></div>
+    </div>
+  } @else {
+    <p class="resumen-texto">
+      <i class="bi bi-calendar-check"></i>
+      {{ totalHorariosLibres() }} horarios libres esta semana
+    </p>
+
+    <div class="preview-cards">
+      @for (dia of semana; track dia.fecha) {
+        <div class="preview-card">
+          <div class="preview-dia">{{ dia.nombre }}</div>
+          <div class="preview-horarios">
+            @if (dia.horariosLibres.length === 6) {
+              <span class="badge-todo-libre">Todo libre</span>
+            } @else if (dia.horariosLibres.length === 0) {
+              <span class="badge-ocupados">Sin turnos</span>
+            } @else {
+              <span class="badge-libres">{{ dia.horariosLibres.length }} libres</span>
+              @if (dia.horariosOcupados.length > 0) {
+                <span class="badge-ocupados">{{ dia.horariosOcupados.length }} ocupados</span>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- PLANTILLA DE LA IMAGEN -->
+<div class="imagen-wrapper">
+  <div #imagenPlantilla class="imagen-plantilla">
+
+    <!-- Decoraciones de fondo -->
+    <div class="img-frame"></div>
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-decor bg-star-1">&#10022;</div>
+    <div class="bg-decor bg-star-2">&#10023;</div>
+    <div class="bg-decor bg-star-3">&#10022;</div>
+    <div class="bg-decor bg-star-4">&#10023;</div>
+    <div class="bg-decor bg-star-5">&#10022;</div>
+
+    <!-- Header -->
+    <div class="img-header">
+      <img src="assets/logo-negocio.jpg" alt="Logo MariGlamour" class="img-logo" />
+      <div class="img-brand">MariGlamour</div>
+      <div class="img-ornament">&#10022; &#10023; &#10022;</div>
+      <div class="img-subtitle">Horarios Disponibles</div>
+      <div class="img-semana">{{ semanaInicio }} - {{ semanaFin }}</div>
+    </div>
+
+    <!-- Dias -->
+    <div class="img-dias">
+      @for (dia of semana; track dia.fecha) {
+        <div class="img-dia">
+          <div class="img-dia-left">
+            <div class="img-dia-nombre">{{ dia.nombre }}</div>
+            <div class="img-dia-fecha">{{ formatearFechaCorta(dia.fecha) }}</div>
+          </div>
+          <div class="img-dia-right">
+            @for (hora of baseSlots; track hora) {
+              @if (dia.horariosLibres.includes(hora)) {
+                <div class="img-slot img-slot-libre">{{ hora }}</div>
+              } @else {
+                <div class="img-slot img-slot-ocupado">{{ hora }}</div>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Footer -->
+    <div class="img-footer">
+      <div class="img-footer-line"></div>
+      <div class="img-footer-text">Reserva tu turno</div>
+      <div class="img-footer-cta">
+        <i class="bi bi-whatsapp"></i> Escribinos para reservar
+      </div>
+    </div>
+
+  </div>
+</div>

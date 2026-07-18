@@ -1,0 +1,69 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  padding: 40px 28px;
+  text-align: center;
+}
+
+.login-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.login-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-light);
+  box-shadow: 0 4px 16px rgba(176, 138, 106, 0.25);
+}
+
+.login-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.login-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-bottom: 28px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.form-group .form-label i {
+  color: var(--primary);
+  margin-right: 4px;
+  font-size: 0.85rem;
+}
+
+.login-btn {
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+}
+
+.login-btn i {
+  margin-right: 6px;
+}

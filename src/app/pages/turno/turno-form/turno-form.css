@@ -1,0 +1,127 @@
+.form-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group .form-label i {
+  color: var(--primary);
+  margin-right: 4px;
+  font-size: 0.85rem;
+}
+
+.form-group .form-label .text-muted {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.servicios-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.servicio-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.servicio-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.servicio-btn.active .servicio-info {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.servicio-nombre {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.servicio-info {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.totales-card {
+  background: rgba(176, 138, 106, 0.06);
+  border: 1.5px solid var(--primary-light);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-top: 14px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  padding: 4px 0;
+}
+
+.total-row + .total-row {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.hora-btn {
+  padding: 12px 8px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.hora-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.hora-btn:active {
+  transform: scale(0.95);
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.form-btn {
+  padding: 12px;
+  font-weight: 500;
+}

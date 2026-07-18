@@ -1,0 +1,46 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-logo-wrap">
+      <img src="assets/logo-negocio.jpg" alt="MariGlamour" class="login-logo" />
+    </div>
+    <h1 class="login-title">MariGlamour</h1>
+    <p class="login-subtitle">Sistema de gestion de turnos</p>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-envelope"></i> Email
+        </label>
+        <input
+          type="email"
+          class="form-control"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="tu@email.com"
+          autocomplete="email"
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-lock"></i> Contrasena
+        </label>
+        <input
+          type="password"
+          class="form-control"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Tu contrasena"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 login-btn" [disabled]="cargando">
+        @if (cargando) {
+          <span class="spinner-border spinner-border-sm"></span>
+        } @else {
+          <i class="bi bi-box-arrow-in-right"></i> Iniciar sesion
+        }
+      </button>
+    </form>
+  </div>
+</div>

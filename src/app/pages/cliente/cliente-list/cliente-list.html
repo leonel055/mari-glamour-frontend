@@ -1,0 +1,39 @@
+<div class="page-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Clientes</h2>
+    <a routerLink="/admin/clientes/nuevo" class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-lg"></i> Nuevo
+    </a>
+  </div>
+
+  @if (clientes.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-people"></i>
+      <p>Sin clientes registrados</p>
+    </div>
+  } @else {
+    <div class="list-group">
+      @for (cliente of clientes; track cliente.id) {
+        <div class="cliente-card-wrapper">
+          <a [routerLink]="['/clientes/editar', cliente.id]" class="cliente-card">
+            <div class="cliente-avatar">
+              <i class="bi bi-person"></i>
+            </div>
+            <div class="cliente-info">
+              <span class="cliente-nombre">{{ cliente.nombre }}</span>
+              @if (cliente.telefono) {
+                <span class="cliente-telefono">
+                  <i class="bi bi-telephone"></i> {{ cliente.telefono }}
+                </span>
+              }
+            </div>
+            <i class="bi bi-chevron-right cliente-arrow"></i>
+          </a>
+          <button class="delete-btn" (click)="eliminarCliente(cliente, $event)" title="Eliminar cliente">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

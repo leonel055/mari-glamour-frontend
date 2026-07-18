@@ -1,0 +1,58 @@
+<div class="page-container">
+  <h2 class="page-title">Agenda</h2>
+
+  <div class="week-nav">
+    <button class="week-arrow" (click)="semanaAnterior()">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <span class="week-label">{{ labelSemana }}</span>
+    <button class="week-arrow" (click)="semanaSiguiente()">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+
+  <div class="week-selector">
+    @for (dia of dias; track dia.fecha) {
+      <button
+        class="day-btn"
+        [class.active]="dia.fecha === fechaSeleccionada"
+        [class.today]="dia.esHoy && dia.fecha !== fechaSeleccionada"
+        (click)="seleccionarDia(dia.fecha)"
+      >
+        <span class="day-label">{{ dia.diaSemana }}</span>
+        <span class="day-num">{{ dia.diaNum }}</span>
+      </button>
+    }
+  </div>
+
+  @if (turnos.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-calendar-x"></i>
+      <p>Sin turnos para este dia</p>
+    </div>
+  } @else {
+    <div class="turnos-list">
+      @for (turno of turnos; track turno.id) {
+        <div class="turno-card">
+          <div class="turno-header">
+            <span class="turno-hora">
+              <i class="bi bi-clock"></i>
+              {{ formatearHora(turno.horaInicio) }} - {{ formatearHora(turno.horaFin) }}
+            </span>
+            <span [class]="claseEstado(turno.estado)">{{ turno.estado }}</span>
+          </div>
+          <div class="turno-body">
+            <div class="turno-cliente">
+              <i class="bi bi-person"></i>
+              {{ turno.Cliente?.nombre || 'Sin cliente' }}
+            </div>
+            <div class="turno-servicio">
+              <i class="bi bi-brush"></i>
+              {{ getServicios(turno) || 'Sin servicio' }}
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

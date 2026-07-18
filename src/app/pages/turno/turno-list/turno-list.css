@@ -1,0 +1,236 @@
+/* Filtro tabs */
+.filtro-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.filtro-btn {
+  padding: 7px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-light);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.filtro-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.filtro-count {
+  display: inline-block;
+  border-radius: 10px;
+  padding: 0 6px;
+  font-size: 0.7rem;
+  margin-left: 4px;
+}
+
+.filtro-btn.active .filtro-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.filtro-btn:not(.active) .filtro-count {
+  background: var(--border);
+  color: var(--text-light);
+}
+
+/* Dia group */
+.dia-group {
+  margin-bottom: 18px;
+}
+
+.dia-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dia-hoy {
+  color: var(--primary);
+}
+
+.dia-hoy-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.dia-count {
+  font-size: 0.7rem;
+  background: var(--border);
+  color: var(--text-light);
+  border-radius: 8px;
+  padding: 0 6px;
+  font-weight: 500;
+}
+
+.dia-hoy .dia-count {
+  background: rgba(176, 138, 106, 0.15);
+  color: var(--primary);
+}
+
+/* Turnos list */
+.turnos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Turno card - horizontal layout */
+.turno-card {
+  display: flex;
+  align-items: stretch;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.15s ease;
+  position: relative;
+}
+
+.turno-card:active {
+  transform: scale(0.985);
+}
+
+.turno-cancelado {
+  opacity: 0.55;
+}
+
+.turno-finalizado {
+  opacity: 0.55;
+}
+
+/* Left side - time */
+.turno-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 68px;
+  padding: 12px 10px;
+  background: rgba(176, 138, 106, 0.06);
+}
+
+.turno-time {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.turno-time-end {
+  font-size: 0.7rem;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
+/* Divider */
+.turno-divider {
+  width: 1px;
+  background: var(--border);
+  align-self: stretch;
+}
+
+/* Right side - info */
+.turno-right {
+  flex: 1;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  position: relative;
+}
+
+.turno-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.turno-cliente {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.turno-servicio {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.turno-extra {
+  font-size: 0.72rem;
+  color: #B08A6A;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Cancel button */
+.turno-cancel-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--danger);
+  font-size: 0.65rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.turno-card:hover .turno-cancel-btn,
+.turno-card:active .turno-cancel-btn {
+  opacity: 1;
+}
+
+.turno-cancel-btn:active {
+  background: rgba(217, 108, 108, 0.12);
+}
+
+/* Badge overrides for inline */
+.turno-top .badge {
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  flex-shrink: 0;
+}

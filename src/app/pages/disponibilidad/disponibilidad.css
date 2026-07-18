@@ -1,0 +1,714 @@
+/* Estilos de la pagina */
+.resumen-texto {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
+
+.resumen-texto i {
+  color: var(--primary);
+  margin-right: 4px;
+}
+
+.preview-cards {
+  display: grid;
+  /* Aumentamos un poquito el ancho mínimo para que las tarjetas no se aplasten */
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+}
+
+.preview-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  text-align: center;
+  /* Aseguramos que el contenido respete el ancho de la tarjeta */
+  overflow: hidden; 
+}
+
+.preview-dia {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.preview-horarios {
+  display: flex;
+  flex-direction: column; /* Obliga a que las etiquetas vayan una debajo de la otra */
+  gap: 8px; /* Espacio entre la etiqueta de libres y ocupados */
+  align-items: center;
+  width: 100%;
+}
+.preview-horarios span {
+  display: block;
+  width: 100%; /* Toma todo el ancho disponible sin salirse */
+  box-sizing: border-box;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 0; /* Lo dejamos en 0 porque el gap ya hace la separación */
+}
+
+.badge-todo-libre {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #E8F5E9;
+  color: #2E7D32;
+  font-weight: 500;
+}
+
+.badge-libres {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #E8F5E9;
+  color: #2E7D32;
+  font-weight: 500;
+}
+
+.badge-ocupados {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #FFEBEE;
+  color: #C62828;
+  font-weight: 500;
+}
+
+/* ==========================================
+   PLANTILLA DE LA IMAGEN
+   ========================================== */
+   .imagen-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1000;
+}
+
+.imagen-plantilla {
+  width: 1080px;
+  height: 1920px;
+  background: linear-gradient(180deg, #FAF7F5 0%, #F5EDE8 100%);
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #4A4A4A;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Header */
+.img-header {
+  text-align: center;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.img-logo {
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 50%;
+  
+  /* Anillo exterior elegante */
+  border: 3px solid transparent;
+  outline: 2px solid var(--copper-primary);
+  outline-offset: 6px;
+  
+  /* TRUCO MÁGICO: mix-blend-mode hace que las partes claras del fondo del logo 
+     se vuelvan transparentes y se mezclen con el fondo de la pantalla */
+  mix-blend-mode: multiply; 
+  
+  box-shadow: 0 15px 30px rgba(140, 90, 69, 0.15);
+  margin-bottom: 35px;
+  margin-top: 15px;
+}
+
+.img-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 82px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+  
+  /* Usamos un color cobre/marrón sólido y oscuro */
+  color: #5c3a21; 
+  
+  /* TRUCO DE RELIEVE: Usamos múltiples sombras para simular un efecto 3D metálico 
+     que html2canvas SÍ puede renderizar sin problemas */
+  text-shadow: 
+    2px 2px 0px #fdf4ec, /* Brillo en la parte inferior derecha */
+    -1px -1px 0px rgba(140, 90, 69, 0.5), /* Sombra oscura en la parte superior izquierda */
+    4px 4px 15px rgba(140, 90, 69, 0.3); /* Sombra difuminada para darle profundidad */
+}
+
+.img-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: #8c5a45; /* Tono más oscuro para contrastar */
+  letter-spacing: 6px;
+  margin-bottom: 10px;
+}
+.bg-circle {
+  position: absolute;
+  border: 1px solid rgba(140, 90, 69, 0.12);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-circle-1 {
+  width: 600px; 
+  height: 600px;
+  top: -150px; 
+  right: -200px;
+}
+
+.bg-circle-2 {
+  width: 700px; 
+  height: 700px;
+  bottom: -250px; 
+  left: -200px;
+}
+
+/* Destellos / Estrellitas flotantes */
+.bg-decor {
+  position: absolute;
+  color: var(--copper-primary);
+  opacity: 0.4; /* Súper sutiles para no distraer */
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Posiciones estratégicas para rellenar los huecos vacíos */
+.bg-star-1 { top: 11%; left: 8%; font-size: 26px; }
+.bg-star-2 { top: 22%; right: 7%; font-size: 18px; }
+.bg-star-3 { top: 48%; right: 9%; font-size: 32px; }
+.bg-star-4 { bottom: 26%; left: 6%; font-size: 22px; }
+.bg-star-5 { bottom: 8%; right: 12%; font-size: 16px; }
+.img-ornament {
+  font-size: 20px;
+  color: var(--copper-primary);
+  margin-bottom: 15px;
+  letter-spacing: 8px;
+  opacity: 0.8;
+}
+.img-divider {
+  width: 60px;
+  height: 2px;
+  background: #D9B8A7;
+  margin: 10px auto;
+  border-radius: 1px;
+}
+
+.img-subtitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #6B5B50;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.img-semana {
+  font-size: 16px;
+  color: #9A8A80;
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+/* Dias */
+.img-dias {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 40px;
+}
+
+.img-dia {
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(176, 138, 106, 0.1);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.img-dia-left {
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.img-dia-nombre {
+  font-size: 20px;
+  font-weight: 700;
+  color: #B08A6A;
+  line-height: 1.2;
+}
+
+.img-dia-fecha {
+  font-size: 14px;
+  color: #9A8A80;
+  margin-top: 2px;
+}
+
+.img-dia-right {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.img-slot {
+  font-size: 17px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 10px;
+  min-width: 80px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.img-slot-libre {
+  background: #E8F5E9;
+  color: #2E7D32;
+  border: 1.5px solid #C8E6C9;
+}
+
+.img-slot-ocupado {
+  background: #F5F5F5;
+  color: #BDBDBD;
+  text-decoration: line-through;
+  text-decoration-color: #E57373;
+  text-decoration-thickness: 2px;
+  border: 1.5px solid #EEEEEE;
+}
+
+/* Footer */
+.img-footer {
+  text-align: center;
+  padding: 20px 40px 44px;
+}
+
+.img-footer-line {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #D9B8A7, transparent);
+  margin: 0 auto 14px;
+}
+
+.img-footer-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: #B08A6A;
+}
+
+.img-footer-cta {
+  font-size: 16px;
+  color: #9A8A80;
+  margin-top: 6px;
+}
+
+.img-footer-cta i {
+  color: #25D366;
+  font-size: 18px;
+}
+
+/* disponibilidad.css */
+
+/* --- Colores de marca basados en el logo --- */
+:root {
+  --copper-primary: #d9a06f; /* Tono cobre principal */
+  --copper-dark: #8c5a45;    /* Tono óxido/marrón oscuro para texto/sombras */
+  --copper-light: #fdf2e9;   /* Tono melocotón muy claro para fondos de slots */
+  --bg-crema: #FAF7F5;      /* Fondo general suave */
+}
+
+/* Estilos de la página (no cambian mucho, solo colores) */
+.page-container {
+  padding: 20px;
+  background-color: var(--bg-crema);
+}
+
+.page-title {
+  color: var(--copper-dark);
+  font-family: 'Playfair Display', serif; /* Tipografía elegante para títulos */
+}
+
+.resumen-texto {
+  color: var(--copper-dark);
+  margin-bottom: 20px;
+}
+
+.preview-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.img-frame {
+  position: absolute;
+  top: 35px; 
+  left: 35px; 
+  right: 35px; 
+  bottom: 35px;
+  border: 1px solid rgba(140, 90, 69, 0.15); /* Cobre muy translúcido */
+  border-radius: 45px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.preview-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  text-align: center;
+}
+
+.preview-dia {
+  font-weight: bold;
+  color: var(--copper-dark);
+  margin-bottom: 8px;
+}
+
+.preview-horarios span {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.badge-libres { color: #28a745; }
+.badge-ocupados { color: #dc3545; }
+.badge-todo-libre { color: #28a745; font-weight: bold; }
+
+/* ==========================================================================
+   PLANTILLA DE LA IMAGEN (Lo que se descarga)
+   Aquí aplicamos la estética del logo
+   ========================================================================== */
+.imagen-wrapper {
+  /* Ocultamos la plantilla de la vista del usuario, pero html2canvas la renderizará */
+  position: absolute;
+  left: -9999px;
+  top: 0;
+}
+
+.imagen-plantilla {
+  width: 1080px; /* Tamaño Story Instagram */
+  height: 1920px;
+  /* Fondo con textura sutil o degradado cálido */
+  background: radial-gradient(circle, #fdf2e9 0%, #f4e1d2 100%);
+  color: var(--copper-dark);
+  font-family: 'Poppins', sans-serif; /* Tipografía limpia para el cuerpo */
+  display: flex;
+  flex-direction: column;
+  padding: 80px 60px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Header de la Imagen --- */
+.img-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.img-logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 20px;
+  /* Opcional: añadir un borde circular sutil al logo si es necesario */
+  /* border: 3px solid var(--copper-primary);
+  border-radius: 50%;
+  padding: 5px; */
+}
+
+.img-brand {
+  font-family: 'Playfair Display', serif; /* Tipografía elegante como el logo */
+  font-size: 64px;
+  font-weight: bold;
+  color: var(--copper-dark);
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.img-divider {
+  height: 2px;
+  background-color: var(--copper-primary);
+  width: 150px;
+  margin: 0 auto 20px auto;
+}
+
+.img-subtitle {
+  font-size: 36px;
+  color: var(--copper-primary);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+.img-semana {
+  font-size: 28px;
+  color: var(--copper-dark);
+}
+
+/* --- Días y Slots de la Imagen --- */
+.img-dias {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.img-dia {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Sombra suave */
+  border: 1px solid rgba(217, 160, 111, 0.2); /* Borde cobre sutil */
+}
+
+.img-dia-left {
+  width: 180px;
+  text-align: left;
+  border-right: 2px solid var(--copper-primary);
+  margin-right: 25px;
+  padding-right: 15px;
+}
+
+.img-dia-nombre {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--copper-dark);
+  font-family: 'Playfair Display', serif;
+}
+
+.img-dia-fecha {
+  font-size: 24px;
+  color: var(--copper-primary);
+}
+
+.img-dia-right {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas de horarios */
+  gap: 15px;
+}
+
+/* Estilo elegante para los slots */
+.img-slot {
+  font-size: 24px;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.img-slot-libre {
+  background-color: var(--copper-light);
+  color: var(--copper-dark);
+  border: 1px solid var(--copper-primary);
+}
+
+.img-slot-ocupado {
+  background-color: #e0e0e0; /* Gris suave */
+  color: #a0a0a0;
+  text-decoration: line-through; /* Tachado para ocupado */
+}
+
+/* --- Footer de la Imagen --- */
+.img-footer {
+  text-align: center;
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 2px solid var(--copper-primary);
+}
+
+.img-footer-text {
+  font-size: 32px;
+  color: var(--copper-dark);
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 15px;
+}
+
+.img-footer-cta {
+  font-size: 28px;
+  color: #25D366; /* Color oficial WhatsApp */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ==========================================================================
+   PLANTILLA DE LA IMAGEN (Estética Premium)
+   ========================================================================== */
+   .imagen-wrapper {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+  }
+  
+  .imagen-plantilla {
+    width: 1080px;
+    height: 1920px;
+    /* Degradado más rico y elegante, simulando el fondo de tu logo */
+    background: linear-gradient(135deg, #fdf4ec 0%, #f3decb 50%, #e6c8b3 100%);
+    color: var(--copper-dark);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 60px;
+    box-sizing: border-box;
+  }
+  
+  /* --- Header de la Imagen --- */
+  .img-header {
+    text-align: center;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .img-logo {
+    width: 180px;
+    height: 180px;
+    object-fit: cover; /* Asegura que el logo no se deforme */
+    border-radius: 50%; /* Lo hace un círculo perfecto */
+    border: 4px solid var(--copper-primary);
+    box-shadow: 0 8px 20px rgba(140, 90, 69, 0.2); /* Sombra cálida */
+    margin-bottom: 25px;
+    background-color: white;
+  }
+  
+  .img-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px; /* Un poco más grande y notorio */
+    font-weight: 700;
+    color: #5c3a21; /* Un marrón más oscuro y contrastante */
+    margin-bottom: 5px;
+  }
+  
+  .img-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--copper-primary);
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .img-semana {
+    font-size: 26px;
+    color: #7a523b;
+    font-weight: 500;
+  }
+  
+  /* --- Días y Slots --- */
+  .img-dias {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  
+  .img-dia {
+    background: rgba(255, 255, 255, 0.85); /* Fondo blanco ligeramente translúcido */
+    border-radius: 20px; /* Bordes más redondeados */
+    padding: 25px 30px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(140, 90, 69, 0.08);
+    border: 1px solid rgba(217, 160, 111, 0.3);
+  }
+  
+  .img-dia-left {
+    width: 200px;
+    text-align: left;
+    border-right: 2px solid rgba(217, 160, 111, 0.3);
+    margin-right: 30px;
+    padding-right: 15px;
+  }
+  
+  .img-dia-nombre {
+    font-size: 34px;
+    font-weight: bold;
+    color: #5c3a21;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .img-dia-fecha {
+    font-size: 22px;
+    color: var(--copper-primary);
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  
+  .img-dia-right {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+  
+  /* --- Horarios (Slots) --- */
+  .img-slot {
+    font-size: 22px;
+    padding: 12px 0;
+    border-radius: 30px; /* Forma de píldora elegante */
+    text-align: center;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  /* Horario Disponible: Se verá como un botón real */
+  .img-slot-libre {
+    background-color: white;
+    color: #5c3a21;
+    border: 1.5px solid var(--copper-primary);
+    box-shadow: 0 4px 10px rgba(217, 160, 111, 0.15);
+  }
+  
+  /* Horario Ocupado: Grisado y más sutil */
+  .img-slot-ocupado {
+    background-color: rgba(224, 224, 224, 0.5);
+    color: #9e9e9e;
+    border: 1.5px solid transparent;
+    text-decoration: line-through;
+  }
+  
+  /* --- Footer --- */
+  .img-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .img-footer-line {
+    height: 2px;
+    width: 80%;
+    background: linear-gradient(90deg, transparent, var(--copper-primary), transparent);
+    margin-bottom: 25px;
+  }
+  
+  .img-footer-text {
+    font-size: 34px;
+    color: #5c3a21;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 10px;
+  }

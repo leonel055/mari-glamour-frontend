@@ -1,0 +1,86 @@
+.list-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cliente-card-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.cliente-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.15s ease;
+  flex: 1;
+}
+
+.cliente-card:active {
+  transform: scale(0.98);
+}
+
+.delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.delete-btn:active {
+  background: #fee;
+}
+
+.cliente-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--secondary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.cliente-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cliente-nombre {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.cliente-telefono {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.cliente-telefono i {
+  font-size: 0.7rem;
+}
+
+.cliente-arrow {
+  color: var(--text-light);
+  font-size: 0.8rem;
+}

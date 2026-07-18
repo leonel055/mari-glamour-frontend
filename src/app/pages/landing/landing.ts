@@ -1,0 +1,249 @@
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { PublicService } from '../../services/public.service';
+
+interface DiaDisponibilidad {
+  nombre: string;
+  fecha: string;
+  fechaCorta: string;
+  horariosLibres: string[];
+}
+
+@Component({
+  selector: 'app-landing',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterLink],
+  templateUrl: './landing.html',
+  styleUrl: './landing.css',
+})
+export class Landing implements OnInit, OnDestroy, AfterViewInit {
+  servicioSeleccionado = '';
+  serviciosDisponibles: { id: string; nombre: string }[] = [];
+  semana: DiaDisponibilidad[] = [];
+  cargando = false;
+  semanaInicio = '';
+  semanaFin = '';
+
+  heroSlide = 0;
+  private heroInterval: any;
+
+  readonly heroSlides = [
+    { image: 'assets/hero-1.jpg' },
+    { image: 'assets/hero-2.jpg' },
+    { image: 'assets/hero-3.jpg' },
+  ];
+
+  readonly serviciosLanding = [
+    { imagen: 'assets/serv-softgel.jpg', nombre: 'Soft Gel', desc: 'Acabado natural y resistente.', duracion: 120, precio: 15000, badge: 'Mas elegido' },
+    { imagen: 'assets/serv-kapping.jpg', nombre: 'Kapping', desc: 'Fortalece tus uñas naturales.', duracion: 120, precio: 14000, badge: '' },
+    { imagen: 'assets/serv-pies.jpg', nombre: 'Pedi Spa', desc: 'Cuidado y belleza para tus pies.', duracion: 120, precio: 15000, badge: '' },
+  ];
+
+  readonly serviciosExtra = [
+    { imagen: 'assets/serv-dermaplaning.jpg', nombre: 'Dermaplaning', desc: 'Exfoliacion profunda para una piel luminosa.', duracion: 60, precio: 12000, badge: '' },
+    { imagen: 'assets/serv-lifting.jpg', nombre: 'Lifting de pestañas', desc: 'Mirada definida y natural sin extensions.', duracion: 90, precio: 11000, badge: '' },
+    { imagen: 'assets/serv-semipermanente.jpg', nombre: 'Semipermanente', desc: 'Color duradero en manos y pies.', duracion: 90, precio: 13000, badge: '' },
+  ];
+
+  mostrarTodos = false;
+
+  readonly galeriaFotos = [
+    'assets/galeria1.jpg',
+    'assets/galeria2.jpg',
+    'assets/galeria3.jpg',
+    'assets/galeria4.jpg',
+    'assets/galeria5.jpg',
+    'assets/galeria6.jpg',
+  ];
+
+  private readonly WHATSAPP_NUM = '5493884427062';
+  private readonly BASE_SLOTS = [
+    { hora: '09:00', minutos: 540 },
+    { hora: '10:30', minutos: 630 },
+    { hora: '14:30', minutos: 870 },
+    { hora: '16:00', minutos: 960 },
+    { hora: '18:00', minutos: 1080 },
+    { hora: '20:00', minutos: 1200 },
+  ];
+
+  constructor(
+    private publicService: PublicService,
+    private cdr: ChangeDetectorRef,
+    private el: ElementRef
+  ) {}
+
+  ngOnInit(): void {
+    this.startHeroCarousel();
+    this.publicService.getServicios().subscribe({
+      next: (data) => {
+        this.serviciosDisponibles = data.map((s) => ({ id: s.id, nombre: s.nombre }));
+        if (data.length > 0) {
+          this.servicioSeleccionado = data[0].id;
+          this.generarSemana();
+          this.cargarDisponibilidad();
+        }
+      },
+    });
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.initScrollReveal(), 200);
+  }
+
+  ngOnDestroy(): void {
+    if (this.heroInterval) clearInterval(this.heroInterval);
+  }
+
+  private initScrollReveal(): void {
+    const elements = this.el.nativeElement.querySelectorAll('.reveal');
+    if (!elements.length) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    elements.forEach((el: Element) => observer.observe(el));
+  }
+
+  startHeroCarousel(): void {
+    this.heroInterval = setInterval(() => {
+      this.heroSlide = (this.heroSlide + 1) % this.heroSlides.length;
+      this.cdr.detectChanges();
+    }, 5500);
+  }
+
+  scrollToSection(id: string): void {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  toggleServicios(): void {
+    this.mostrarTodos = !this.mostrarTodos;
+  }
+
+  reservarWhatsApp(servicioNombre: string): void {
+    const msg = encodeURIComponent(
+      `Hola! Me gustaria reservar un turno para ${servicioNombre}.`
+    );
+    window.open(`https://wa.me/${this.WHATSAPP_NUM}?text=${msg}`, '_blank');
+  }
+
+  generarSemana(): void {
+    const hoy = new Date();
+    const diaSemana = hoy.getDay();
+    const inicio = new Date(hoy);
+    inicio.setDate(hoy.getDate() - ((diaSemana + 6) % 7));
+    const nombres = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+    this.semana = [];
+    for (let i = 0; i < 6; i++) {
+      const fecha = new Date(inicio);
+      fecha.setDate(inicio.getDate() + i);
+      const yyyy = fecha.getFullYear();
+      const mm = String(fecha.getMonth() + 1).padStart(2, '0');
+      const dd = String(fecha.getDate()).padStart(2, '0');
+      const fechaStr = `${yyyy}-${mm}-${dd}`;
+      this.semana.push({
+        nombre: nombres[i],
+        fecha: fechaStr,
+        fechaCorta: `${fecha.getDate()}/${fecha.getMonth() + 1}`,
+        horariosLibres: [],
+      });
+    }
+    if (this.semana.length > 0) {
+      this.semanaInicio = this.formatearFechaLarga(this.semana[0].fecha);
+      this.semanaFin = this.formatearFechaLarga(this.semana[this.semana.length - 1].fecha);
+    }
+  }
+
+  onServicioChange(): void {
+    this.cargarDisponibilidad();
+  }
+
+  cargarDisponibilidad(): void {
+    this.cargando = true;
+    this.cdr.detectChanges();
+    for (const dia of this.semana) {
+      dia.horariosLibres = [];
+    }
+    const ids = this.servicioSeleccionado ? [this.servicioSeleccionado] : [];
+    const hoy = new Date();
+    const hoyStr = this.formatearFechaStr(hoy);
+    const minutosAhora = hoy.getHours() * 60 + hoy.getMinutes();
+    let completadas = 0;
+    const total = this.semana.length;
+    for (const dia of this.semana) {
+      this.publicService.getDisponibilidad(dia.fecha, ids).subscribe({
+        next: (libres) => {
+          const esHoy = dia.fecha === hoyStr;
+          const esPasado = dia.fecha < hoyStr;
+          if (esPasado) {
+            dia.horariosLibres = [];
+          } else if (esHoy) {
+            dia.horariosLibres = libres.filter((h) => {
+              const [hh, mm] = h.split(':').map(Number);
+              return hh * 60 + mm > minutosAhora;
+            });
+          } else {
+            dia.horariosLibres = libres;
+          }
+          completadas++;
+          if (completadas === total) {
+            this.cargando = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: () => {
+          completadas++;
+          if (completadas === total) {
+            this.cargando = false;
+            this.cdr.detectChanges();
+          }
+        },
+      });
+    }
+  }
+
+  reservarTurno(hora: string, fecha: string): void {
+    const serv = this.serviciosDisponibles.find((s) => s.id === this.servicioSeleccionado);
+    const nombreServicio = serv?.nombre || 'Servicio';
+    const d = new Date(fecha + 'T12:00:00');
+    const dias = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+    const fechaLarga = `${dias[d.getDay()]} ${d.getDate()}/${d.getMonth() + 1}`;
+    const msg = encodeURIComponent(
+      `Hola! Me gustaria reservar un turno.\n\nDia: ${fechaLarga}\nHorario: ${hora}\nServicio: ${nombreServicio}\n\nGracias!`
+    );
+    window.open(`https://wa.me/${this.WHATSAPP_NUM}?text=${msg}`, '_blank');
+  }
+
+  formatearFechaLarga(fecha: string): string {
+    const d = new Date(fecha + 'T12:00:00');
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    return `${d.getDate()} ${meses[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  formatearFechaStr(fecha: Date): string {
+    const yyyy = fecha.getFullYear();
+    const mm = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dd = String(fecha.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  totalHorariosLibres(): number {
+    return this.semana.reduce((sum, d) => sum + d.horariosLibres.length, 0);
+  }
+
+  formatoPrecio(precio: number): string {
+    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(precio);
+  }
+
+  duracionLabel(minutos: number): string {
+    if (minutos < 60) return `${minutos} min`;
+    const h = Math.floor(minutos / 60);
+    const m = minutos % 60;
+    return m > 0 ? `${h}h ${m}min` : `${h}h`;
+  }
+}

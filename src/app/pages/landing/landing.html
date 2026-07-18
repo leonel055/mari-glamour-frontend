@@ -1,0 +1,264 @@
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+  <!-- Background carousel -->
+  <div class="hero-bg">
+    @for (slide of heroSlides; track slide.image; let i = $index) {
+      <div class="hero-slide" [class.active]="i === heroSlide">
+        <img [src]="slide.image" alt="Trabajo de Mari Glamour" />
+      </div>
+    }
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- Top bar: logo + menu -->
+  <div class="hero-topbar anim-top">
+    <img src="assets/logo-negocio.jpg" alt="Logo" class="topbar-logo" />
+    <a routerLink="/login" class="topbar-menu">
+      <i class="bi bi-list"></i>
+    </a>
+  </div>
+
+  <!-- Main content card -->
+  <div class="hero-card anim-card">
+    <div class="hero-title-group">
+      <span class="hero-title-accent"></span>
+      <h1 class="hero-title">Mari Glamour</h1>
+      <span class="hero-title-accent"></span>
+    </div>
+    <p class="hero-subtitle">Uñas que reflejan tu estilo</p>
+    <p class="hero-desc">
+      Especialista en uñas, dermaplaning, limpieza facial y pestañas.
+      Diseños exclusivos y tratamientos personalizados para que te sientas radiante.
+    </p>
+
+    <div class="hero-buttons">
+      <button class="btn-hero-fill" (click)="scrollToSection('turnos')">
+        <i class="bi bi-calendar-check"></i> Ver turnos disponibles
+      </button>
+      <button class="btn-hero-outline" (click)="scrollToSection('servicios')">
+        <i class="bi bi-brush"></i> Ver servicios
+      </button>
+    </div>
+
+    <!-- Feature chips -->
+    <div class="hero-features">
+      <div class="feature-chip">
+        <i class="bi bi-star-fill"></i>
+        <span>Uñas</span>
+      </div>
+      <div class="feature-chip">
+        <i class="bi bi-star-fill"></i>
+        <span>Dermaplaning</span>
+      </div>
+      <div class="feature-chip">
+        <i class="bi bi-star-fill"></i>
+        <span>Pestañas</span>
+      </div>
+      <div class="feature-chip">
+        <i class="bi bi-geo-alt-fill"></i>
+        <span>Monterrico</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero-scroll anim-scroll" (click)="scrollToSection('servicios')">
+    <span>Deslizá hacia abajo</span>
+    <div class="scroll-arrow">
+      <i class="bi bi-chevron-down"></i>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SERVICIOS ═══════ -->
+<section class="section" id="servicios">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Nuestros servicios</span>
+      <h2 class="section-title">Servicios Destacados</h2>
+    </div>
+    <div class="services-list">
+      @for (servicio of serviciosLanding; track servicio.nombre; let i = $index) {
+        <div class="service-card reveal" [style.animation-delay]="(i * 0.1) + 's'">
+          <div class="service-card-img">
+            <img [src]="servicio.imagen" [alt]="servicio.nombre" />
+            <div class="service-img-overlay"></div>
+            @if (servicio.badge) {
+              <span class="service-badge">{{ servicio.badge }}</span>
+            }
+            <div class="service-img-text">
+              <h3 class="service-img-name">{{ servicio.nombre }}</h3>
+              <span class="service-img-dur">{{ duracionLabel(servicio.duracion) }}</span>
+            </div>
+          </div>
+          <div class="service-card-bottom">
+            <div class="service-meta">
+              <span class="service-meta-item"><i class="bi bi-clock"></i> {{ duracionLabel(servicio.duracion) }}</span>
+              <span class="service-meta-item service-price">Desde {{ formatoPrecio(servicio.precio) }}</span>
+            </div>
+            <button class="service-reservar" (click)="reservarWhatsApp(servicio.nombre)">
+              Reservar <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      }
+
+      <div class="service-card service-card-cta" (click)="toggleServicios()">
+        <div class="service-cta-body">
+          <span class="service-cta-icon" [class.rotated]="mostrarTodos"></span>
+          <h3 class="service-cta-title">{{ mostrarTodos ? 'Ver menos servicios' : 'Ver todos los servicios' }}</h3>
+          <p class="service-cta-desc" *ngIf="!mostrarTodos">
+            Descubrí todos los tratamientos que ofrecemos.
+          </p>
+          <span class="service-cta-arrow" [class.open]="mostrarTodos">
+            <i class="bi bi-chevron-down"></i>
+          </span>
+        </div>
+      </div>
+
+      @if (mostrarTodos) {
+        <div class="services-extra">
+          @for (servicio of serviciosExtra; track servicio.nombre) {
+            <div class="service-card service-card-extra">
+              <div class="service-card-img">
+                <img [src]="servicio.imagen" [alt]="servicio.nombre" />
+                <div class="service-img-overlay"></div>
+                <div class="service-img-text">
+                  <h3 class="service-img-name">{{ servicio.nombre }}</h3>
+                  <span class="service-img-dur">{{ duracionLabel(servicio.duracion) }}</span>
+                </div>
+              </div>
+              <div class="service-card-bottom">
+                <div class="service-meta">
+                  <span class="service-meta-item"><i class="bi bi-clock"></i> {{ duracionLabel(servicio.duracion) }}</span>
+                  <span class="service-meta-item service-price">Desde {{ formatoPrecio(servicio.precio) }}</span>
+                </div>
+                <button class="service-reservar" (click)="reservarWhatsApp(servicio.nombre); $event.stopPropagation()">
+                  Reservar <i class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ GALERIA / INSTAGRAM ═══════ -->
+<section class="section section-gallery" id="galeria">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Nuestro trabajo</span>
+      <h2 class="section-title">Trabajos Realizados</h2>
+    </div>
+
+    <div class="gallery-grid reveal">
+      @for (foto of galeriaFotos; track foto; let i = $index) {
+        <div class="gallery-item">
+          <img [src]="foto" alt="Trabajo {{ i + 1 }}" />
+        </div>
+      }
+    </div>
+
+    <a class="ig-link reveal" href="https://www.instagram.com/mariglamour_estudio_de_belleza/" target="_blank" rel="noopener">
+      <i class="bi bi-instagram"></i>
+      <span>Ver mas en Instagram</span>
+      <i class="bi bi-arrow-up-right"></i>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════ TURNOS ═══════ -->
+<section class="section section-turnos" id="turnos">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Agenda</span>
+      <h2 class="section-title">Turnos Disponibles</h2>
+      <p class="section-desc">Elegi tu servicio y horario</p>
+    </div>
+
+    <div class="turno-select">
+      <select class="form-select" [(ngModel)]="servicioSeleccionado" (ngModelChange)="onServicioChange()">
+        @for (s of serviciosDisponibles; track s.id) {
+          <option [value]="s.id">{{ s.nombre }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="week-label" *ngIf="semanaInicio">
+      {{ semanaInicio }} - {{ semanaFin }}
+    </div>
+
+    @if (cargando) {
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <p>Buscando horarios...</p>
+      </div>
+    } @else if (totalHorariosLibres() === 0) {
+      <div class="empty-box">
+        <p>No hay turnos disponibles esta semana</p>
+        <p class="empty-sub">Intenta con otro servicio</p>
+      </div>
+    } @else {
+      <div class="days-list">
+        @for (dia of semana; track dia.fecha) {
+          @if (dia.horariosLibres.length > 0) {
+            <div class="day-card day-card-enter">
+              <div class="day-head">
+                <span class="day-name">{{ dia.nombre }}</span>
+                <span class="day-date">{{ dia.fechaCorta }}</span>
+              </div>
+              <div class="day-slots">
+                @for (hora of dia.horariosLibres; track hora) {
+                  <button
+                    class="slot-btn"
+                    (click)="reservarTurno(hora, dia.fecha)"
+                  >
+                    {{ hora }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ═══════ UBICACION ═══════ -->
+<section class="section section-location">
+  <div class="container">
+    <div class="location-card reveal">
+      <div class="location-icon">
+        <i class="bi bi-geo-alt-fill"></i>
+      </div>
+      <h3 class="location-title">Monterrico - Galeria Migues</h3>
+      <p class="location-text">Contactanos por WhatsApp para sacar tu turno</p>
+      <a class="location-wa" href="https://wa.me/5493884427062" target="_blank">
+        <i class="bi bi-whatsapp"></i> Escribinos por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer class="public-footer">
+  <div class="footer-inner">
+    <h4 class="footer-brand">Mari Glamour</h4>
+
+    <div class="footer-links">
+      <a class="footer-link-item" href="https://wa.me/5493884427062" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+      </a>
+      <a class="footer-link-item" href="https://www.instagram.com/mariglamour_estudio_de_belleza/" target="_blank">
+        <i class="bi bi-instagram"></i>
+      </a>
+    </div>
+
+    <p class="footer-copy">&copy; 2026 Mari Glamour</p>
+    <a routerLink="/login" class="footer-admin">Admin</a>
+  </div>
+</footer>

@@ -1,0 +1,32 @@
+<div class="page-container">
+  <h2 class="page-title">{{ esEdicion ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+
+  <div class="form-card">
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-person"></i> Nombre *
+        </label>
+        <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" placeholder="Nombre completo" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-telephone"></i> Telefono
+        </label>
+        <input type="tel" class="form-control" [(ngModel)]="cliente.telefono" name="telefono" placeholder="Numero de telefono" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-envelope"></i> Email
+        </label>
+        <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" placeholder="correo@ejemplo.com" />
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary form-btn">
+          <i class="bi bi-check-lg"></i> {{ esEdicion ? 'Guardar Cambios' : 'Crear Cliente' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary form-btn" (click)="router.navigate(['/admin/clientes'])">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

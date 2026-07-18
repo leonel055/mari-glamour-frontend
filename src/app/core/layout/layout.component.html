@@ -1,0 +1,35 @@
+<app-toast />
+
+<header class="app-header">
+  <div class="header-content">
+    <img src="assets/logo-negocio.jpg" alt="Logo" class="header-logo" />
+    <span class="header-brand">MariGlamour</span>
+  </div>
+</header>
+
+<main class="app-main">
+  <router-outlet />
+</main>
+
+<nav class="bottom-nav">
+  <a routerLink="/admin/agenda" routerLinkActive="active" class="nav-item">
+    <i class="bi bi-calendar3"></i>
+    <span>Agenda</span>
+  </a>
+  <a routerLink="/admin/clientes" routerLinkActive="active" class="nav-item">
+    <i class="bi bi-people"></i>
+    <span>Clientes</span>
+  </a>
+  <a routerLink="/admin/servicios" routerLinkActive="active" class="nav-item">
+    <i class="bi bi-brush"></i>
+    <span>Servicios</span>
+  </a>
+  <a routerLink="/admin/turnos" routerLinkActive="active" class="nav-item">
+    <i class="bi bi-clock-history"></i>
+    <span>Turnos</span>
+  </a>
+  <a routerLink="/admin/disponibilidad" routerLinkActive="active" class="nav-item">
+    <i class="bi bi-image"></i>
+    <span>Disponible</span>
+  </a>
+</nav>

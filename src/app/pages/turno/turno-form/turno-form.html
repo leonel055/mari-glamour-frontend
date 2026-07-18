@@ -1,0 +1,109 @@
+<div class="page-container">
+  <h2 class="page-title">Nuevo Turno</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-card">
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-person"></i> Cliente *
+        </label>
+        <select class="form-select" [(ngModel)]="clienteId" name="clienteId">
+          <option value="">Seleccionar cliente</option>
+          @for (c of clientes; track c.id) {
+            <option [value]="c.id">{{ c.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-brush"></i> Servicios * <small class="text-muted">(selecciona uno o mas)</small>
+        </label>
+        <div class="servicios-grid">
+          @for (s of servicios; track s.id) {
+            <button
+              type="button"
+              class="servicio-btn"
+              [class.active]="isSelected(s.id)"
+              (click)="toggleServicio(s.id)"
+            >
+              <span class="servicio-nombre">{{ s.nombre }}</span>
+              <span class="servicio-info">{{ formatearDuracion(s.duracion) }} | {{ formatearPrecio(s.precio) }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      @if (servicioIds.length > 0) {
+        <div class="totales-card">
+          <div class="total-row">
+            <span>Servicios seleccionados:</span>
+            <span>{{ servicioIds.length }}</span>
+          </div>
+          <div class="total-row">
+            <span>Duracion total:</span>
+            <span class="fw-bold">{{ formatearDuracion(duracionTotal) }}</span>
+          </div>
+          <div class="total-row">
+            <span>Precio servicios:</span>
+            <span>{{ formatearPrecio(precioTotal) }}</span>
+          </div>
+        </div>
+      }
+
+      @if (servicioIds.length > 0) {
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="form-label">
+            <i class="bi bi-cash"></i> Costo adicional (opcional)
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="costoAdicional"
+            name="costoAdicional"
+            min="0"
+            step="100"
+            placeholder="0"
+          />
+          <small class="text-muted">Decoraciones, disenos complejos, etc.</small>
+        </div>
+      }
+    </div>
+
+    <div class="form-card" style="margin-top: 12px;">
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-calendar3"></i> Fecha *
+        </label>
+        <input type="date" class="form-control" [(ngModel)]="fecha" name="fecha" [min]="fechaMinima" (change)="onFechaCambia()" />
+      </div>
+
+      @if (horarios.length > 0) {
+        <div class="form-group">
+          <label class="form-label">
+            <i class="bi bi-clock"></i> Hora de inicio *
+          </label>
+          <div class="horarios-grid">
+            @for (h of horarios; track h) {
+              <button
+                type="button"
+                class="hora-btn"
+                [class.active]="horaInicio === h"
+                (click)="horaInicio = h"
+              >
+                {{ h }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary form-btn">
+        <i class="bi bi-check-lg"></i> Crear Turno
+      </button>
+      <button type="button" class="btn btn-outline-secondary form-btn" (click)="router.navigate(['/admin/turnos'])">Cancelar</button>
+    </div>
+  </form>
+</div>
