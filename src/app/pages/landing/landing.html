@@ -1,5 +1,5 @@
 <!-- ═══════ HERO ═══════ -->
-<section class="hero">
+<section class="hero" id="hero">
   <!-- Background carousel -->
   <div class="hero-bg">
     @for (slide of heroSlides; track slide.image; let i = $index) {
@@ -69,6 +69,33 @@
     </div>
   </div>
 </section>
+
+<!-- ═══════ NAVBAR STICKY ═══════ -->
+<nav class="landing-nav" [class.visible]="navbarVisible">
+  <div class="landing-nav-inner">
+    <a class="nav-landing-brand" (click)="scrollToSection('hero'); $event.preventDefault()">
+      <img src="assets/logo-negocio.jpg" alt="Logo" class="nav-landing-logo" />
+      <span class="nav-landing-name">Mari Glamour</span>
+    </a>
+    <div class="nav-landing-links">
+      <a class="nav-landing-link" (click)="scrollToSection('servicios'); $event.preventDefault()">
+        <i class="bi bi-brush"></i> Servicios
+      </a>
+      <a class="nav-landing-link" (click)="scrollToSection('catalogo'); $event.preventDefault()">
+        <i class="bi bi-bag"></i> Catalogo
+      </a>
+      <a class="nav-landing-link" (click)="scrollToSection('turnos'); $event.preventDefault()">
+        <i class="bi bi-calendar-check"></i> Turnos
+      </a>
+      <a class="nav-landing-link" (click)="toggleCursos()">
+        <i class="bi bi-mortarboard-fill"></i> Cursos
+      </a>
+    </div>
+    <a routerLink="/login" class="nav-landing-admin">
+      <i class="bi bi-person-gear"></i>
+    </a>
+  </div>
+</nav>
 
 <!-- ═══════ SERVICIOS ═══════ -->
 <section class="section" id="servicios">
@@ -236,32 +263,56 @@
         <h2 class="section-title">Catalogo de Productos</h2>
       </div>
 
-      <div class="catalogo-grid reveal">
-        @for (producto of productos; track producto.id) {
-          <div class="catalogo-card">
-            @if (producto.imagen) {
-              <div class="catalogo-img">
-                <img [src]="producto.imagen" [alt]="producto.nombre" />
-              </div>
+      <!-- Filtros -->
+      <div class="catalogo-filters reveal">
+        <div class="catalogo-search">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Buscar producto..." [(ngModel)]="busquedaProducto" (ngModelChange)="filtrarProductos()" />
+        </div>
+        @if (categorias.length > 0) {
+          <div class="catalogo-cats">
+            @for (cat of categorias; track cat) {
+              <button class="catalogo-cat-chip" [class.active]="categoriaSeleccionada === cat" (click)="seleccionarCategoria(cat)">
+                {{ cat }}
+              </button>
             }
-            <div class="catalogo-body">
-              @if (producto.categoria) {
-                <span class="catalogo-badge">{{ producto.categoria }}</span>
-              }
-              <h4 class="catalogo-nombre">{{ producto.nombre }}</h4>
-              @if (producto.descripcion) {
-                <p class="catalogo-desc">{{ producto.descripcion }}</p>
-              }
-              <div class="catalogo-bottom">
-                <span class="catalogo-precio">{{ formatoPrecio(producto.precio) }}</span>
-                <button class="catalogo-btn-wa" (click)="reservarWhatsApp('producto: ' + producto.nombre)">
-                  <i class="bi bi-whatsapp"></i>
-                </button>
-              </div>
-            </div>
           </div>
         }
       </div>
+
+      @if (productosFiltrados.length === 0) {
+        <div class="catalogo-empty reveal">
+          <i class="bi bi-search"></i>
+          <p>No se encontraron productos</p>
+        </div>
+      } @else {
+        <div class="catalogo-grid reveal">
+          @for (producto of productosFiltrados; track producto.id) {
+            <div class="catalogo-card">
+              @if (producto.imagen) {
+                <div class="catalogo-img">
+                  <img [src]="producto.imagen" [alt]="producto.nombre" />
+                </div>
+              }
+              <div class="catalogo-body">
+                @if (producto.categoria) {
+                  <span class="catalogo-badge">{{ producto.categoria }}</span>
+                }
+                <h4 class="catalogo-nombre">{{ producto.nombre }}</h4>
+                @if (producto.descripcion) {
+                  <p class="catalogo-desc">{{ producto.descripcion }}</p>
+                }
+                <div class="catalogo-bottom">
+                  <span class="catalogo-precio">{{ formatoPrecio(producto.precio) }}</span>
+                  <button class="catalogo-btn-wa" (click)="reservarWhatsApp('producto: ' + producto.nombre)">
+                    <i class="bi bi-whatsapp"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
     </div>
   </section>
 }

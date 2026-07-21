@@ -34,21 +34,35 @@
 
       <div class="form-group">
         <label class="form-label">
-          <i class="bi bi-image"></i> URL de imagen
+          <i class="bi bi-image"></i> Imagen del producto
         </label>
-        <input type="text" class="form-control" [(ngModel)]="producto.imagen" name="imagen" placeholder="https://..." />
-        @if (producto.imagen) {
-          <div class="form-preview">
-            <img [src]="producto.imagen" alt="Preview" />
+
+        @if (!previewUrl) {
+          <label class="upload-zone">
+            <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onFileSelected($event)" hidden />
+            <i class="bi bi-cloud-arrow-up"></i>
+            <span>Toca para seleccionar imagen</span>
+            <small>JPG, PNG o WebP (max 5MB)</small>
+          </label>
+        } @else {
+          <div class="upload-preview">
+            <img [src]="previewUrl" alt="Preview" />
+            <button type="button" class="upload-remove" (click)="clearImage()">
+              <i class="bi bi-x-lg"></i>
+            </button>
           </div>
         }
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary form-btn">
-          <i class="bi bi-check-lg"></i> {{ esEdicion ? 'Guardar Cambios' : 'Crear Producto' }}
+        <button type="submit" class="btn btn-primary form-btn" [disabled]="subiendo">
+          @if (subiendo) {
+            <span class="spinner-sm"></span> Subiendo...
+          } @else {
+            <i class="bi bi-check-lg"></i> {{ esEdicion ? 'Guardar Cambios' : 'Crear Producto' }}
+          }
         </button>
-        <button type="button" class="btn btn-outline-secondary form-btn" (click)="router.navigate(['/admin/productos'])">Cancelar</button>
+        <button type="button" class="btn btn-outline-secondary form-btn" (click)="router.navigate(['/admin/productos'])" [disabled]="subiendo">Cancelar</button>
       </div>
     </form>
   </div>

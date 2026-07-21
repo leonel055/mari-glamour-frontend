@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class ProductoService {
   private readonly API = `${environment.apiBase}/productos`;
+  private readonly UPLOAD = `${environment.apiBase}/upload`;
 
   constructor(private http: HttpClient) {}
 
@@ -24,5 +25,11 @@ export class ProductoService {
 
   eliminar(id: string): Observable<any> {
     return this.http.delete(`${this.API}/${id}`);
+  }
+
+  subirImagen(archivo: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('imagen', archivo);
+    return this.http.post<{ url: string }>(this.UPLOAD, formData);
   }
 }
