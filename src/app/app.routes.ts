@@ -9,6 +9,7 @@ export const routes: Routes = [
     component: PublicLayoutComponent,
     children: [
       { path: '', loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing) },
+      { path: 'catalogo', loadComponent: () => import('./pages/catalogo/catalogo-page').then((m) => m.CatalogoPage) },
     ],
   },
   { path: 'login', loadComponent: () => import('./pages/login/login').then((m) => m.Login) },

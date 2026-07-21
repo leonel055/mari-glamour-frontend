@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { PublicService } from '../../services/public.service';
 import { Curso } from '../../shared/interfaces/curso.interface';
-import { Producto } from '../../shared/interfaces/producto.interface';
 
 interface DiaDisponibilidad {
   nombre: string;
@@ -26,11 +25,9 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
   semana: DiaDisponibilidad[] = [];
   diaActualIndex = 0;
   cargando = false;
-  navbarVisible = false;
 
   heroSlide = 0;
   private heroInterval: any;
-  private scrollHandler: any;
 
   readonly heroSlides = [
     { image: 'assets/hero-1.jpg' },
@@ -52,12 +49,7 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
 
   mostrarTodos = false;
   cursos: Curso[] = [];
-  productos: Producto[] = [];
-  productosFiltrados: Producto[] = [];
   mostrarCursos = false;
-  busquedaProducto = '';
-  categoriaSeleccionada = '';
-  categorias: string[] = [];
 
   readonly galeriaFotos = [
     'assets/galeria1.jpg',
@@ -86,18 +78,9 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.startHeroCarousel();
-    this.initNavbarScroll();
     this.publicService.getCursos().subscribe({
       next: (data) => {
         this.cursos = data;
-        this.cdr.detectChanges();
-      },
-    });
-    this.publicService.getProductos().subscribe({
-      next: (data) => {
-        this.productos = data;
-        this.productosFiltrados = data;
-        this.categorias = [...new Set(data.map((p) => p.categoria).filter(Boolean))] as string[];
         this.cdr.detectChanges();
       },
     });
@@ -119,28 +102,6 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     if (this.heroInterval) clearInterval(this.heroInterval);
-    if (this.scrollHandler) window.removeEventListener('scroll', this.scrollHandler);
-  }
-
-  private initNavbarScroll(): void {
-    this.scrollHandler = () => {
-      this.navbarVisible = window.scrollY > window.innerHeight * 0.6;
-    };
-    window.addEventListener('scroll', this.scrollHandler, { passive: true });
-  }
-
-  filtrarProductos(): void {
-    const term = this.busquedaProducto.toLowerCase().trim();
-    this.productosFiltrados = this.productos.filter((p) => {
-      const matchBusqueda = !term || p.nombre.toLowerCase().includes(term) || (p.descripcion && p.descripcion.toLowerCase().includes(term));
-      const matchCategoria = !this.categoriaSeleccionada || p.categoria === this.categoriaSeleccionada;
-      return matchBusqueda && matchCategoria;
-    });
-  }
-
-  seleccionarCategoria(cat: string): void {
-    this.categoriaSeleccionada = this.categoriaSeleccionada === cat ? '' : cat;
-    this.filtrarProductos();
   }
 
   private initScrollReveal(): void {

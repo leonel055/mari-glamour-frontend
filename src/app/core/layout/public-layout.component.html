@@ -1,0 +1,24 @@
+<nav class="pub-nav">
+  <a routerLink="/" class="pub-nav-brand">
+    <img src="assets/logo-negocio.jpg" alt="Logo" class="pub-nav-logo" />
+    <span class="pub-nav-name">Mari Glamour</span>
+  </a>
+
+  <div class="pub-nav-links">
+    <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" class="pub-nav-link">
+      <i class="bi bi-house-door"></i>
+      <span>Inicio</span>
+    </a>
+    <a routerLink="/catalogo" routerLinkActive="active-link" class="pub-nav-link">
+      <i class="bi bi-bag"></i>
+      <span>Catalogo</span>
+    </a>
+    <a routerLink="/login" class="pub-nav-admin">
+      <i class="bi bi-person-gear"></i>
+    </a>
+  </div>
+</nav>
+
+<main class="pub-main">
+  <router-outlet />
+</main>

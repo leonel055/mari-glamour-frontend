@@ -1,0 +1,86 @@
+<div class="catalogo-page">
+  <div class="catalogo-header">
+    <h1 class="catalogo-title">Catalogo de Productos</h1>
+    <p class="catalogo-sub">Encontra lo que necesitas</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        placeholder="Buscar producto..."
+        [(ngModel)]="busqueda"
+        (ngModelChange)="filtrar()"
+      />
+      @if (busqueda) {
+        <button class="search-clear" (click)="busqueda = ''; filtrar()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      }
+    </div>
+
+    @if (categorias.length > 0) {
+      <div class="cat-chips">
+        @for (cat of categorias; track cat) {
+          <button
+            class="cat-chip"
+            [class.active]="categoriaSel === cat"
+            (click)="toggleCategoria(cat)"
+          >
+            {{ cat }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Resultados -->
+  @if (cargando) {
+    <div class="catalogo-state">
+      <div class="spinner"></div>
+      <p>Cargando productos...</p>
+    </div>
+  } @else if (filtrados.length === 0) {
+    <div class="catalogo-state">
+      <i class="bi bi-search"></i>
+      <p>No se encontraron productos</p>
+    </div>
+  } @else {
+    <div class="resultados-count">
+      {{ filtrados.length }} producto{{ filtrados.length !== 1 ? 's' : '' }}
+    </div>
+
+    <div class="productos-grid">
+      @for (producto of filtrados; track producto.id) {
+        <div class="prod-card">
+          @if (producto.imagen) {
+            <div class="prod-img">
+              <img [src]="producto.imagen" [alt]="producto.nombre" />
+            </div>
+          } @else {
+            <div class="prod-img prod-img-placeholder">
+              <i class="bi bi-box-seam"></i>
+            </div>
+          }
+          <div class="prod-body">
+            @if (producto.categoria) {
+              <span class="prod-badge">{{ producto.categoria }}</span>
+            }
+            <h4 class="prod-nombre">{{ producto.nombre }}</h4>
+            @if (producto.descripcion) {
+              <p class="prod-desc">{{ producto.descripcion }}</p>
+            }
+            <div class="prod-bottom">
+              <span class="prod-precio">{{ formatoPrecio(producto.precio) }}</span>
+              <button class="prod-wa" (click)="consultarProducto(producto.nombre)">
+                <i class="bi bi-whatsapp"></i> Consultar
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
