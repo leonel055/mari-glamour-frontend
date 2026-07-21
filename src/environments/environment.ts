@@ -7,3 +7,4 @@ export const environment = {
     return 'https://mari-glamour-backend.onrender.com/api';
   },
 };
+//permite trabajar en local y en la nube netlifi (desplegada)
