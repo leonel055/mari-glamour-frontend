@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { PublicService } from '../../services/public.service';
+import { Curso } from '../../shared/interfaces/curso.interface';
+import { Producto } from '../../shared/interfaces/producto.interface';
 
 interface DiaDisponibilidad {
   nombre: string;
@@ -22,9 +24,8 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
   servicioSeleccionado = '';
   serviciosDisponibles: { id: string; nombre: string }[] = [];
   semana: DiaDisponibilidad[] = [];
+  diaActualIndex = 0;
   cargando = false;
-  semanaInicio = '';
-  semanaFin = '';
 
   heroSlide = 0;
   private heroInterval: any;
@@ -48,6 +49,9 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   mostrarTodos = false;
+  cursos: Curso[] = [];
+  productos: Producto[] = [];
+  mostrarCursos = false;
 
   readonly galeriaFotos = [
     'assets/galeria1.jpg',
@@ -76,6 +80,18 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.startHeroCarousel();
+    this.publicService.getCursos().subscribe({
+      next: (data) => {
+        this.cursos = data;
+        this.cdr.detectChanges();
+      },
+    });
+    this.publicService.getProductos().subscribe({
+      next: (data) => {
+        this.productos = data;
+        this.cdr.detectChanges();
+      },
+    });
     this.publicService.getServicios().subscribe({
       next: (data) => {
         this.serviciosDisponibles = data.map((s) => ({ id: s.id, nombre: s.nombre }));
@@ -125,6 +141,14 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
     this.mostrarTodos = !this.mostrarTodos;
   }
 
+  toggleCursos(): void {
+    this.mostrarCursos = !this.mostrarCursos;
+  }
+
+  cerrarCursos(): void {
+    this.mostrarCursos = false;
+  }
+
   reservarWhatsApp(servicioNombre: string): void {
     const msg = encodeURIComponent(
       `Hola! Me gustaria reservar un turno para ${servicioNombre}.`
@@ -153,14 +177,43 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
         horariosLibres: [],
       });
     }
-    if (this.semana.length > 0) {
-      this.semanaInicio = this.formatearFechaLarga(this.semana[0].fecha);
-      this.semanaFin = this.formatearFechaLarga(this.semana[this.semana.length - 1].fecha);
-    }
+    const hoyStr = this.formatearFechaStr(hoy);
+    const idx = this.semana.findIndex((d) => d.fecha === hoyStr);
+    this.diaActualIndex = idx >= 0 ? idx : 0;
   }
 
   onServicioChange(): void {
     this.cargarDisponibilidad();
+  }
+
+  get diaActual(): DiaDisponibilidad | undefined {
+    return this.semana[this.diaActualIndex];
+  }
+
+  get puedeAvanzar(): boolean {
+    return this.diaActualIndex < this.semana.length - 1;
+  }
+
+  get puedeRetroceder(): boolean {
+    return this.diaActualIndex > 0;
+  }
+
+  diaSiguiente(): void {
+    if (this.puedeAvanzar) {
+      this.diaActualIndex++;
+    }
+  }
+
+  diaAnterior(): void {
+    if (this.puedeRetroceder) {
+      this.diaActualIndex--;
+    }
+  }
+
+  esHoy(): boolean {
+    if (!this.diaActual) return false;
+    const hoy = new Date();
+    return this.diaActual.fecha === this.formatearFechaStr(hoy);
   }
 
   cargarDisponibilidad(): void {
@@ -233,7 +286,8 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
   }
 
   totalHorariosLibres(): number {
-    return this.semana.reduce((sum, d) => sum + d.horariosLibres.length, 0);
+    const dia = this.diaActual;
+    return dia ? dia.horariosLibres.length : 0;
   }
 
   formatoPrecio(precio: number): string {
@@ -245,5 +299,19 @@ export class Landing implements OnInit, OnDestroy, AfterViewInit {
     const h = Math.floor(minutos / 60);
     const m = minutos % 60;
     return m > 0 ? `${h}h ${m}min` : `${h}h`;
+  }
+
+  formatFechaLanding(fecha: string): string {
+    if (!fecha) return '';
+    const d = new Date(fecha + 'T12:00:00');
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    return `${d.getDate()} ${meses[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  formatFechaCorta(fecha: string): string {
+    if (!fecha) return '';
+    const d = new Date(fecha + 'T12:00:00');
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    return `${d.getDate()} ${meses[d.getMonth()]}`;
   }
 }

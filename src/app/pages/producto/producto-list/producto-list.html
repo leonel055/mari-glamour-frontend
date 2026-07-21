@@ -1,0 +1,47 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2 class="page-title">Productos</h2>
+    <button class="btn btn-primary btn-add" (click)="router.navigate(['/admin/productos/nuevo'])">
+      <i class="bi bi-plus-lg"></i> Nuevo
+    </button>
+  </div>
+
+  @if (productos.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-box-seam empty-icon"></i>
+      <p class="empty-text">No hay productos</p>
+    </div>
+  } @else {
+    <div class="productos-grid">
+      @for (producto of productos; track producto.id) {
+        <div class="producto-card">
+          @if (producto.imagen) {
+            <div class="producto-img">
+              <img [src]="producto.imagen" [alt]="producto.nombre" />
+            </div>
+          }
+          <div class="producto-body">
+            <div class="producto-top">
+              <span class="producto-nombre">{{ producto.nombre }}</span>
+              <span class="producto-precio">${{ producto.precio }}</span>
+            </div>
+            @if (producto.categoria) {
+              <span class="producto-badge">{{ producto.categoria }}</span>
+            }
+            @if (producto.descripcion) {
+              <p class="producto-desc">{{ producto.descripcion }}</p>
+            }
+            <div class="producto-actions">
+              <button class="btn-action btn-edit" (click)="router.navigate(['/admin/productos/editar', producto.id])">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn-action btn-delete" (click)="eliminar(producto); $event.stopPropagation()">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

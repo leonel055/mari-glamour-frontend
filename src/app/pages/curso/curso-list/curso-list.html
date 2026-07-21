@@ -1,0 +1,43 @@
+<div class="page-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Cursos</h2>
+    <a routerLink="/admin/cursos/nuevo" class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-lg"></i> Nuevo
+    </a>
+  </div>
+
+  @if (cursos.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-book"></i>
+      <p>Sin cursos registrados</p>
+    </div>
+  } @else {
+    <div class="cursos-list">
+      @for (curso of cursos; track curso.id) {
+        <div class="curso-card-wrapper">
+          <a [routerLink]="['/admin/cursos/editar', curso.id]" class="curso-card">
+            <div class="curso-fecha">
+              <i class="bi bi-calendar-event"></i>
+              {{ formatearFecha(curso.fechaInicio) }}
+              @if (curso.fechaFin) {
+                <span class="curso-fecha-sep">-</span> {{ formatearFecha(curso.fechaFin) }}
+              }
+            </div>
+            <div class="curso-nombre">{{ curso.nombre }}</div>
+            <div class="curso-meta">
+              @if (curso.horario) {
+                <span class="curso-meta-item"><i class="bi bi-clock"></i> {{ curso.horario }}</span>
+              }
+              <span class="curso-meta-item"><i class="bi bi-cash"></i> {{ formatearPrecio(curso.precio) }}</span>
+              <span class="curso-meta-item"><i class="bi bi-people"></i> {{ curso.cuposDisponibles }}/{{ curso.cupos }}</span>
+            </div>
+            <i class="bi bi-chevron-right curso-arrow"></i>
+          </a>
+          <button class="delete-btn" (click)="eliminarCurso(curso, $event)" title="Eliminar curso">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

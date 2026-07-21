@@ -1,0 +1,148 @@
+<div class="page-container">
+  <h2 class="page-title">{{ esEdicion ? 'Editar Curso' : 'Nuevo Curso' }}</h2>
+
+  <div class="form-card">
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-book"></i> Nombre *
+        </label>
+        <input type="text" class="form-control" [(ngModel)]="curso.nombre" name="nombre" placeholder="Nombre del curso" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-card-text"></i> Descripcion
+        </label>
+        <textarea class="form-control" [(ngModel)]="curso.descripcion" name="descripcion" rows="3" placeholder="Descripcion del curso..."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group form-group-half">
+          <label class="form-label">
+            <i class="bi bi-calendar-event"></i> Fecha inicio *
+          </label>
+          <input type="date" class="form-control" [(ngModel)]="curso.fechaInicio" name="fechaInicio" />
+        </div>
+        <div class="form-group form-group-half">
+          <label class="form-label">
+            <i class="bi bi-calendar-check"></i> Fecha fin
+          </label>
+          <input type="date" class="form-control" [(ngModel)]="curso.fechaFin" name="fechaFin" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-clock"></i> Horario
+        </label>
+        <input type="text" class="form-control" [(ngModel)]="curso.horario" name="horario" placeholder="Ej: 18:00 - 20:00" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group form-group-half">
+          <label class="form-label">
+            <i class="bi bi-hourglass-split"></i> Duracion (horas)
+          </label>
+          <input type="number" class="form-control" [(ngModel)]="curso.duracion" name="duracion" placeholder="0" />
+        </div>
+        <div class="form-group form-group-half">
+          <label class="form-label">
+            <i class="bi bi-cash"></i> Precio mensual *
+          </label>
+          <input type="number" class="form-control" [(ngModel)]="curso.precio" name="precio" placeholder="0" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group form-group-half">
+          <label class="form-label">
+            <i class="bi bi-person-plus"></i> Inscripcion
+          </label>
+          <input type="number" class="form-control" [(ngModel)]="curso.inscripcion" name="inscripcion" placeholder="0" />
+        </div>
+        <div class="form-group form-group-half">
+          <label class="form-label">
+            <i class="bi bi-people"></i> Cupos totales *
+          </label>
+          <input type="number" class="form-control" [(ngModel)]="curso.cupos" name="cupos" placeholder="0" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-person-check"></i> Cupos disponibles
+        </label>
+        <input type="number" class="form-control" [(ngModel)]="curso.cuposDisponibles" name="cuposDisponibles" placeholder="Igual a cupos totales" />
+      </div>
+
+      <!-- ═══════ TEMARIO ═══════ -->
+      <div class="section-divider">
+        <span><i class="bi bi-list-task"></i> Temario</span>
+      </div>
+
+      @if (curso.temario && curso.temario.length > 0) {
+        @for (modulo of curso.temario; track $index; let mi = $index) {
+          <div class="temario-modulo">
+            <div class="temario-modulo-header">
+              <span class="temario-modulo-num">Modulo {{ mi + 1 }}</span>
+              <button type="button" class="temario-remove-btn" (click)="eliminarModulo(mi)">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+            <input type="text" class="form-control temario-titulo" [(ngModel)]="modulo.titulo" [name]="'mtitulo' + mi" placeholder="Titulo del modulo" />
+            <div class="temario-items-list">
+              @for (item of modulo.items; track $index; let ii = $index) {
+                <div class="temario-item-row">
+                  <i class="bi bi-drag-handle temario-item-icon"></i>
+                  <input type="text" class="form-control temario-item-input" [(ngModel)]="modulo.items[ii]" [name]="'mitem' + mi + '_' + ii" placeholder="Item del modulo" />
+                  <button type="button" class="temario-item-remove" (click)="eliminarItem(mi, ii)">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+              }
+              <button type="button" class="temario-add-item" (click)="agregarItem(mi)">
+                <i class="bi bi-plus"></i> Agregar item
+              </button>
+            </div>
+          </div>
+        }
+      }
+      <button type="button" class="temario-add-modulo" (click)="agregarModulo()">
+        <i class="bi bi-plus-circle"></i> Agregar modulo
+      </button>
+
+      <!-- ═══════ QUE INCLUYE ═══════ -->
+      <div class="section-divider">
+        <span><i class="bi bi-gift"></i> Que incluye</span>
+      </div>
+
+      @if (curso.incluye && curso.incluye.length > 0) {
+        <div class="incluye-list">
+          @for (item of curso.incluye; track $index; let ii = $index) {
+            <div class="incluye-item-row">
+              <i class="bi bi-check-circle-fill incluye-item-icon"></i>
+              <span class="incluye-item-text">{{ item }}</span>
+              <button type="button" class="incluye-item-remove" (click)="eliminarIncluye(ii)">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+          }
+        </div>
+      }
+      <div class="incluye-add-row">
+        <input type="text" class="form-control incluye-input" [(ngModel)]="nuevoItemIncluye" name="nuevoIncluye" placeholder="Ej: Material para practicas" (keydown.enter)="agregarIncluye(); $event.preventDefault()" />
+        <button type="button" class="btn btn-primary btn-sm" (click)="agregarIncluye()">
+          <i class="bi bi-plus"></i>
+        </button>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary form-btn">
+          <i class="bi bi-check-lg"></i> {{ esEdicion ? 'Guardar Cambios' : 'Crear Curso' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary form-btn" (click)="router.navigate(['/admin/cursos'])">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

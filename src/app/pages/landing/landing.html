@@ -187,46 +187,84 @@
       </select>
     </div>
 
-    <div class="week-label" *ngIf="semanaInicio">
-      {{ semanaInicio }} - {{ semanaFin }}
-    </div>
+    @if (diaActual) {
+      <div class="day-nav">
+        <button class="day-nav-btn" [disabled]="!puedeRetroceder" (click)="diaAnterior()">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="day-nav-info">
+          <span class="day-nav-name">{{ diaActual.nombre }}</span>
+          <span class="day-nav-date">{{ formatearFechaLarga(diaActual.fecha) }}</span>
+          @if (esHoy()) {
+            <span class="day-nav-today">Hoy</span>
+          }
+        </div>
+        <button class="day-nav-btn" [disabled]="!puedeAvanzar" (click)="diaSiguiente()">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    }
 
     @if (cargando) {
       <div class="loading-box">
         <div class="spinner"></div>
         <p>Buscando horarios...</p>
       </div>
-    } @else if (totalHorariosLibres() === 0) {
+    } @else if (!diaActual || diaActual.horariosLibres.length === 0) {
       <div class="empty-box">
-        <p>No hay turnos disponibles esta semana</p>
-        <p class="empty-sub">Intenta con otro servicio</p>
+        <p>No hay turnos disponibles este dia</p>
+        <p class="empty-sub">Probá con otro servicio o dia</p>
       </div>
     } @else {
-      <div class="days-list">
-        @for (dia of semana; track dia.fecha) {
-          @if (dia.horariosLibres.length > 0) {
-            <div class="day-card day-card-enter">
-              <div class="day-head">
-                <span class="day-name">{{ dia.nombre }}</span>
-                <span class="day-date">{{ dia.fechaCorta }}</span>
-              </div>
-              <div class="day-slots">
-                @for (hora of dia.horariosLibres; track hora) {
-                  <button
-                    class="slot-btn"
-                    (click)="reservarTurno(hora, dia.fecha)"
-                  >
-                    {{ hora }}
-                  </button>
-                }
-              </div>
-            </div>
-          }
+      <div class="day-slots-single">
+        @for (hora of diaActual.horariosLibres; track hora) {
+          <button class="slot-btn" (click)="reservarTurno(hora, diaActual.fecha)">
+            {{ hora }}
+          </button>
         }
       </div>
     }
   </div>
 </section>
+
+<!-- ═══════ CATALOGO ═══════ -->
+@if (productos.length > 0) {
+  <section class="section section-catalogo" id="catalogo">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Tienda</span>
+        <h2 class="section-title">Catalogo de Productos</h2>
+      </div>
+
+      <div class="catalogo-grid reveal">
+        @for (producto of productos; track producto.id) {
+          <div class="catalogo-card">
+            @if (producto.imagen) {
+              <div class="catalogo-img">
+                <img [src]="producto.imagen" [alt]="producto.nombre" />
+              </div>
+            }
+            <div class="catalogo-body">
+              @if (producto.categoria) {
+                <span class="catalogo-badge">{{ producto.categoria }}</span>
+              }
+              <h4 class="catalogo-nombre">{{ producto.nombre }}</h4>
+              @if (producto.descripcion) {
+                <p class="catalogo-desc">{{ producto.descripcion }}</p>
+              }
+              <div class="catalogo-bottom">
+                <span class="catalogo-precio">{{ formatoPrecio(producto.precio) }}</span>
+                <button class="catalogo-btn-wa" (click)="reservarWhatsApp('producto: ' + producto.nombre)">
+                  <i class="bi bi-whatsapp"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+}
 
 <!-- ═══════ UBICACION ═══════ -->
 <section class="section section-location">
@@ -243,6 +281,137 @@
     </div>
   </div>
 </section>
+
+<!-- ═══════ BOTON FLOTANTE CURSOS ═══════ -->
+@if (cursos.length > 0) {
+  <button class="fab-cursos" (click)="toggleCursos()">
+    <i class="bi bi-mortarboard-fill"></i>
+  </button>
+}
+
+<!-- ═══════ BOTTOM SHEET CURSOS ═══════ -->
+@if (mostrarCursos) {
+  <div class="cursos-overlay" (click)="cerrarCursos()"></div>
+  <div class="cursos-sheet">
+    <!-- Header sticky -->
+    <div class="cursos-sheet-header">
+      <button class="cursos-sheet-close" (click)="cerrarCursos()">
+        <i class="bi bi-chevron-down"></i>
+      </button>
+    </div>
+
+    <div class="cursos-sheet-body">
+      @for (curso of cursos; track curso.id) {
+        <!-- Banner hero -->
+        <div class="curso-hero">
+          <div class="curso-hero-glow"></div>
+          <h2 class="curso-hero-title">{{ curso.nombre }}</h2>
+          <p class="curso-hero-desc">{{ curso.descripcion }}</p>
+          <div class="curso-hero-badges">
+            @if (curso.cuposDisponibles > 0) {
+              <span class="curso-badge curso-badge-gold">{{ curso.cuposDisponibles }} cupos</span>
+            } @else {
+              <span class="curso-badge curso-badge-red">Sin cupos</span>
+            }
+            @if (curso.duracion) {
+              <span class="curso-badge">{{ curso.duracion / 4 }} meses</span>
+            }
+          </div>
+        </div>
+
+        <!-- Precios -->
+        <div class="curso-precios">
+          <div class="curso-precio-card">
+            <span class="curso-precio-label">Inscripcion</span>
+            <span class="curso-precio-valor" *ngIf="curso.inscripcion">{{ formatoPrecio(curso.inscripcion) }}</span>
+            <span class="curso-precio-note">No reembolsable</span>
+          </div>
+          <div class="curso-precio-card curso-precio-main">
+            <span class="curso-precio-label">Mensual</span>
+            <span class="curso-precio-valor">{{ formatoPrecio(curso.precio) }}</span>
+            <span class="curso-precio-note">por mes</span>
+          </div>
+        </div>
+
+        <!-- Info rapida -->
+        <div class="curso-info-chips">
+          <div class="curso-chip">
+            <i class="bi bi-calendar3"></i>
+            <span>{{ formatFechaLanding(curso.fechaInicio) }} - {{ formatFechaCorta(curso.fechaFin || '') }}</span>
+          </div>
+          <div class="curso-chip">
+            <i class="bi bi-clock-history"></i>
+            <span>{{ curso.horario }}</span>
+          </div>
+          <div class="curso-chip">
+            <i class="bi bi-hourglass-split"></i>
+            <span>~3 horas por clase</span>
+          </div>
+        </div>
+
+        <!-- Temario -->
+        @if (curso.temario && curso.temario.length > 0) {
+          <div class="curso-temario-block">
+            <div class="curso-temario-header">
+              <div class="curso-temario-header-icon">
+                <i class="bi bi-book-half"></i>
+              </div>
+              <div>
+                <h3 class="curso-temario-title">Temario</h3>
+                <p class="curso-temario-sub">{{ curso.temario.length }} modulos</p>
+              </div>
+            </div>
+
+            <div class="curso-temario-list">
+              @for (seccion of curso.temario; track seccion.titulo; let i = $index) {
+                <div class="curso-tema-card">
+                  <div class="curso-tema-num">{{ i + 1 }}</div>
+                  <div class="curso-tema-content">
+                    <h4 class="curso-tema-name">{{ seccion.titulo }}</h4>
+                    <div class="curso-tema-items">
+                      @for (item of seccion.items; track item) {
+                        <span class="curso-tema-item">{{ item }}</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Que incluye -->
+        @if (curso.incluye && curso.incluye.length > 0) {
+          <div class="curso-incluye-block">
+            <div class="curso-incluye-header">
+              <div class="curso-incluye-header-icon">
+                <i class="bi bi-gift"></i>
+              </div>
+              <h3 class="curso-incluye-title">Que incluye</h3>
+            </div>
+            <div class="curso-incluye-chips">
+              @for (item of curso.incluye; track item) {
+                <span class="curso-incluye-chip">
+                  <i class="bi bi-check2"></i>
+                  {{ item }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- CTA fijo al fondo -->
+        <div class="curso-cta-block">
+          <a class="curso-cta-wa" href="https://wa.me/5493884427062?text=Hola!%20Me%20interesa%20el%20Curso%20de%20Manicura.%20Quisiera%20mas%20informacion." target="_blank">
+            <i class="bi bi-whatsapp"></i>
+            <span>Quiero inscribirme</span>
+          </a>
+          <p class="curso-cta-sub">Respondemos por WhatsApp</p>
+        </div>
+      }
+    </div>
+  </div>
+}
 
 <!-- ═══════ FOOTER ═══════ -->
 <footer class="public-footer">

@@ -1,0 +1,270 @@
+.form-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px 20px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group .form-label i {
+  color: var(--primary);
+  margin-right: 4px;
+  font-size: 0.85rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-group-half {
+  flex: 1;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.form-btn {
+  padding: 12px;
+  font-weight: 500;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* ═══════ SECTION DIVIDER ═══════ */
+.section-divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0 16px;
+  gap: 8px;
+}
+
+.section-divider span {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.section-divider span i {
+  margin-right: 4px;
+}
+
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #E8E2DE;
+}
+
+/* ═══════ TEMARIO ═══════ */
+.temario-modulo {
+  background: #f9f6f3;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #E8E2DE;
+}
+
+.temario-modulo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.temario-modulo-num {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.temario-remove-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #dc3545;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+.temario-remove-btn:active {
+  background: #fee;
+}
+
+.temario-titulo {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.temario-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.temario-item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.temario-item-icon {
+  color: #B08A6A;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.temario-item-input {
+  flex: 1;
+  font-size: 0.85rem;
+  padding: 8px 10px;
+}
+
+.temario-item-remove {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.temario-item-remove:active {
+  background: #f0f0f0;
+  color: #dc3545;
+}
+
+.temario-add-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1.5px dashed #D9B8A7;
+  border-radius: 8px;
+  padding: 7px 10px;
+  color: var(--primary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.temario-add-item:active {
+  background: rgba(176, 138, 106, 0.08);
+}
+
+.temario-add-item i {
+  font-size: 0.7rem;
+}
+
+.temario-add-modulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  background: none;
+  border: 2px dashed #D9B8A7;
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--primary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.temario-add-modulo:active {
+  background: rgba(176, 138, 106, 0.06);
+}
+
+/* ═══════ QUE INCLUYE ═══════ */
+.incluye-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.incluye-item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f9f6f3;
+  border-radius: 8px;
+  border: 1px solid #E8E2DE;
+}
+
+.incluye-item-icon {
+  color: var(--primary);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.incluye-item-text {
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  color: #3D3028;
+}
+
+.incluye-item-remove {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.incluye-item-remove:active {
+  background: #f0f0f0;
+  color: #dc3545;
+}
+
+.incluye-add-row {
+  display: flex;
+  gap: 8px;
+}
+
+.incluye-input {
+  flex: 1;
+  font-size: 0.85rem;
+}

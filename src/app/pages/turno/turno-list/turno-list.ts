@@ -142,7 +142,7 @@ export class TurnoList implements OnInit {
         if (res.estado === 'CANCELADO') {
           this.toast.success('Turno cancelado - horario disponible');
         } else {
-          this.toast.info('Turno finalizado (ya paso la hora)');
+          this.toast.info('Turno finalizado');
         }
         this.cargar();
       },

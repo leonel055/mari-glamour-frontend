@@ -78,7 +78,7 @@ export class TurnoForm implements OnInit {
       const s = this.servicios.find((sv) => sv.id === id);
       if (s) {
         this.duracionTotal += Number(s.duracion) || 90;
-        this.precioTotal += Number(s.precio) || 0;
+        this.precioTotal += this.costoAdicional + Number(s.precio) || 0;
       }
     }
   }

@@ -1,0 +1,99 @@
+.cursos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.curso-card-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+
+.curso-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.15s ease;
+  flex: 1;
+}
+
+.curso-card:active {
+  transform: scale(0.98);
+}
+
+.delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.delete-btn:active {
+  background: #fee;
+}
+
+.curso-fecha {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.curso-fecha i {
+  font-size: 0.7rem;
+}
+
+.curso-fecha-sep {
+  margin: 0 2px;
+}
+
+.curso-nombre {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.curso-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.curso-meta-item {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.curso-meta-item i {
+  color: var(--secondary);
+  font-size: 0.7rem;
+}
+
+.curso-arrow {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
