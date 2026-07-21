@@ -20,8 +20,8 @@
    ═══════════════════════════════════ */
 .hero {
   position: relative;
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -72,45 +72,6 @@
       rgba(250, 247, 245, 0.75) 90%,
       rgba(250, 247, 245, 0.92) 100%
     );
-}
-
-/* ── Top bar ── */
-.hero-topbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-}
-
-.topbar-logo {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
-}
-
-.topbar-menu {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  color: #3D3028;
-  font-size: 1.3rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
 /* ── Content card ── */
@@ -314,17 +275,11 @@
 }
 
 /* ── Animations ── */
-.anim-top    { opacity: 0; animation: fadeDown 0.5s ease 0.15s forwards; }
 .anim-card   { opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
 .anim-scroll { opacity: 0; animation: fadeUp 0.5s ease 0.7s forwards; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
