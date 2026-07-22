@@ -1019,7 +1019,7 @@
 /* ═══ HERO ═══ */
 .curso-hero {
   background: linear-gradient(160deg, #3D3028 0%, #5A4738 50%, #7A6550 100%);
-  padding: 28px 24px 24px;
+  padding: 28px 24px 100px;
   position: relative;
   overflow: hidden;
 }
