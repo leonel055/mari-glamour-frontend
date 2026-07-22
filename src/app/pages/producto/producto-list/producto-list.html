@@ -25,8 +25,14 @@
               <span class="producto-nombre">{{ producto.nombre }}</span>
               <span class="producto-precio">${{ producto.precio }}</span>
             </div>
+            @if (producto.marca) {
+              <span class="producto-badge">{{ producto.marca }}</span>
+            }
             @if (producto.categoria) {
               <span class="producto-badge">{{ producto.categoria }}</span>
+            }
+            @if (producto.stock != null) {
+              <span class="producto-stock">Stock: {{ producto.stock }}</span>
             }
             @if (producto.descripcion) {
               <p class="producto-desc">{{ producto.descripcion }}</p>

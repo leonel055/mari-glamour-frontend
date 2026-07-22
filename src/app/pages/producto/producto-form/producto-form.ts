@@ -17,9 +17,11 @@ export class ProductoForm implements OnInit {
   producto: Partial<Producto> = {
     nombre: '',
     descripcion: '',
+    marca: '',
     precio: 0,
     imagen: '',
     categoria: '',
+    stock: 0,
     activo: true,
   };
   esEdicion = false;

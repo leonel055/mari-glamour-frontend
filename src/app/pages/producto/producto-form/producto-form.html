@@ -32,6 +32,21 @@
         </div>
       </div>
 
+      <div class="form-row">
+        <div class="form-group form-group-half">
+          <label class="form-label">
+            <i class="bi bi-building"></i> Marca
+          </label>
+          <input type="text" class="form-control" [(ngModel)]="producto.marca" name="marca" placeholder="Marca del producto" />
+        </div>
+        <div class="form-group form-group-half">
+          <label class="form-label">
+            <i class="bi bi-box"></i> Stock
+          </label>
+          <input type="number" class="form-control" [(ngModel)]="producto.stock" name="stock" placeholder="0" />
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="form-label">
           <i class="bi bi-image"></i> Imagen del producto

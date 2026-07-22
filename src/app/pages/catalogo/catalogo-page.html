@@ -1,72 +1,67 @@
 <div class="catalogo-page">
-  <div class="catalogo-header">
-    <h1 class="catalogo-title">Catalogo de Productos</h1>
-    <p class="catalogo-sub">Encontra lo que necesitas</p>
+  <div class="page-header">
+    <h1 class="page-title">Catalogo</h1>
+    <p class="page-sub">Descubri nuestros productos</p>
   </div>
 
   <!-- Filtros -->
   <div class="filtros">
     <div class="search-box">
       <i class="bi bi-search"></i>
-      <input
-        type="text"
-        placeholder="Buscar producto..."
-        [(ngModel)]="busqueda"
-        (ngModelChange)="filtrar()"
-      />
+      <input type="text" placeholder="Buscar producto, marca..." [(ngModel)]="busqueda" (ngModelChange)="filtrar()" />
       @if (busqueda) {
-        <button class="search-clear" (click)="busqueda = ''; filtrar()">
-          <i class="bi bi-x-lg"></i>
-        </button>
+        <button class="search-clear" (click)="busqueda = ''; filtrar()"><i class="bi bi-x-lg"></i></button>
       }
     </div>
-
     @if (categorias.length > 0) {
       <div class="cat-chips">
         @for (cat of categorias; track cat) {
-          <button
-            class="cat-chip"
-            [class.active]="categoriaSel === cat"
-            (click)="toggleCategoria(cat)"
-          >
-            {{ cat }}
-          </button>
+          <button class="cat-chip" [class.active]="categoriaSel === cat" (click)="toggleCategoria(cat)">{{ cat }}</button>
         }
       </div>
     }
   </div>
 
-  <!-- Resultados -->
+  <!-- Skeleton -->
   @if (cargando) {
-    <div class="catalogo-state">
-      <div class="spinner"></div>
-      <p>Cargando productos...</p>
+    <div class="productos-grid">
+      @for (_ of skeletonArray; track $index) {
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line w-40"></div>
+            <div class="skeleton-line w-80"></div>
+            <div class="skeleton-line w-60"></div>
+            <div class="skeleton-line w-30"></div>
+          </div>
+        </div>
+      }
     </div>
   } @else if (filtrados.length === 0) {
-    <div class="catalogo-state">
-      <i class="bi bi-search"></i>
-      <p>No se encontraron productos</p>
+    <div class="empty-state">
+      <div class="empty-icon"><i class="bi bi-search"></i></div>
+      <h3 class="empty-title">Sin resultados</h3>
+      <p class="empty-text">No encontramos productos con estos filtros</p>
+      <button class="empty-btn" (click)="busqueda = ''; categoriaSel = ''; filtrar()">Limpiar filtros</button>
     </div>
   } @else {
-    <div class="resultados-count">
-      {{ filtrados.length }} producto{{ filtrados.length !== 1 ? 's' : '' }}
-    </div>
-
+    <div class="resultados-count">{{ filtrados.length }} producto{{ filtrados.length !== 1 ? 's' : '' }}</div>
     <div class="productos-grid">
       @for (producto of filtrados; track producto.id) {
-        <div class="prod-card">
-          @if (producto.imagen) {
-            <div class="prod-img">
-              <img [src]="imagenUrl(producto.imagen)" [alt]="producto.nombre" />
+        <div class="prod-card" [class.revealed]="animados.has(producto.id)" [attr.data-index]="producto.id">
+          <div class="prod-img">
+            @if (producto.imagen) {
+              <img [src]="imagenUrl(producto.imagen)" [alt]="producto.nombre" loading="lazy" />
+            } @else {
+              <div class="prod-img-placeholder"><i class="bi bi-box-seam"></i></div>
+            }
+            <div class="prod-stock-badge" [class.agotado]="producto.stock <= 0">
+              {{ producto.stock > 0 ? 'En stock' : 'Agotado' }}
             </div>
-          } @else {
-            <div class="prod-img prod-img-placeholder">
-              <i class="bi bi-box-seam"></i>
-            </div>
-          }
+          </div>
           <div class="prod-body">
-            @if (producto.categoria) {
-              <span class="prod-badge">{{ producto.categoria }}</span>
+            @if (producto.marca) {
+              <span class="prod-marca">{{ producto.marca }}</span>
             }
             <h4 class="prod-nombre">{{ producto.nombre }}</h4>
             @if (producto.descripcion) {
@@ -74,8 +69,8 @@
             }
             <div class="prod-bottom">
               <span class="prod-precio">{{ formatoPrecio(producto.precio) }}</span>
-              <button class="prod-wa" (click)="consultarProducto(producto.nombre)">
-                <i class="bi bi-whatsapp"></i> Consultar
+              <button class="prod-btn" (click)="abrirDetalle(producto)">
+                Ver detalle <i class="bi bi-arrow-right"></i>
               </button>
             </div>
           </div>
@@ -84,3 +79,60 @@
     </div>
   }
 </div>
+
+<!-- ═══ MODAL DETALLE ═══ -->
+@if (mostrarDetalle && productoSeleccionado) {
+  <div class="modal-overlay" (click)="cerrarDetalle()"></div>
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <button class="modal-close" (click)="cerrarDetalle()">
+        <i class="bi bi-chevron-down"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      @if (productoSeleccionado.imagen) {
+        <div class="modal-img">
+          <img [src]="imagenUrl(productoSeleccionado.imagen)" [alt]="productoSeleccionado.nombre" />
+        </div>
+      }
+
+      <div class="modal-info">
+        @if (productoSeleccionado.marca) {
+          <span class="modal-marca">{{ productoSeleccionado.marca }}</span>
+        }
+        <h2 class="modal-nombre">{{ productoSeleccionado.nombre }}</h2>
+
+        <div class="modal-precio">{{ formatoPrecio(productoSeleccionado.precio) }}</div>
+
+        <div class="modal-chips">
+          @if (productoSeleccionado.categoria) {
+            <span class="modal-chip">{{ productoSeleccionado.categoria }}</span>
+          }
+          <span class="modal-chip" [class.chip-danger]="productoSeleccionado.stock <= 0">
+            <i class="bi bi-box"></i>
+            {{ productoSeleccionado.stock > 0 ? productoSeleccionado.stock + ' en stock' : 'Agotado' }}
+          </span>
+        </div>
+
+        @if (productoSeleccionado.descripcion) {
+          <p class="modal-desc">{{ productoSeleccionado.descripcion }}</p>
+        }
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-btn-wa" (click)="consultarWhatsApp(productoSeleccionado.nombre)">
+          <i class="bi bi-whatsapp"></i>
+          Consultar por WhatsApp
+        </button>
+
+        <!-- Futuro: Agregar al carrito / Favoritos -->
+        <button class="modal-btn-fav" disabled title="Proximamente">
+          <i class="bi bi-heart"></i>
+        </button>
+      </div>
+
+      <p class="modal-future">Compra online proximamente</p>
+    </div>
+  </div>
+}
