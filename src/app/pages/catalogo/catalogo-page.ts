@@ -20,6 +20,7 @@ export class CatalogoPage implements OnInit {
   cargando = true;
 
   private readonly WHATSAPP_NUM = '5493884427062';
+  private readonly BACKEND = 'https://mari-glamour-backend.onrender.com';
 
   constructor(
     private publicService: PublicService,
@@ -69,5 +70,11 @@ export class CatalogoPage implements OnInit {
       currency: 'ARS',
       maximumFractionDigits: 0,
     }).format(precio);
+  }
+
+  imagenUrl(url: string | undefined): string {
+    if (!url) return '';
+    if (url.startsWith('/')) return `${this.BACKEND}${url}`;
+    return url;
   }
 }

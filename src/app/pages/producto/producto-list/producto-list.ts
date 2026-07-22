@@ -50,4 +50,10 @@ export class ProductoList implements OnInit {
       },
     });
   }
+
+  imagenUrl(url: string | undefined): string {
+    if (!url) return '';
+    if (url.startsWith('/')) return `https://mari-glamour-backend.onrender.com${url}`;
+    return url;
+  }
 }
