@@ -10,6 +10,8 @@ export const routes: Routes = [
     children: [
       { path: '', loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing) },
       { path: 'catalogo', loadComponent: () => import('./pages/catalogo/catalogo-page').then((m) => m.CatalogoPage) },
+      { path: 'carrito', loadComponent: () => import('./pages/carrito/carrito-page').then((m) => m.CarritoPage) },
+      { path: 'checkout', loadComponent: () => import('./pages/checkout/checkout-page').then((m) => m.CheckoutPage) },
     ],
   },
   { path: 'login', loadComponent: () => import('./pages/login/login').then((m) => m.Login) },

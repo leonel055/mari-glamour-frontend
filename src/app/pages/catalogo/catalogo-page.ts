@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Producto } from '../../shared/interfaces/producto.interface';
 import { PublicService } from '../../services/public.service';
+import { CartService } from '../../services/cart.service';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-catalogo-page',
@@ -22,13 +24,16 @@ export class CatalogoPage implements OnInit {
 
   productoSeleccionado: Producto | null = null;
   mostrarDetalle = false;
+  cantidadCarrito = 1;
 
   private readonly WHATSAPP_NUM = '5493884427062';
   private readonly SKELETON_COUNT = 6;
 
   constructor(
     private publicService: PublicService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private cartService: CartService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -87,12 +92,24 @@ export class CatalogoPage implements OnInit {
   abrirDetalle(producto: Producto): void {
     this.productoSeleccionado = producto;
     this.mostrarDetalle = true;
+    this.cantidadCarrito = 1;
     document.body.style.overflow = 'hidden';
   }
 
   cerrarDetalle(): void {
     this.mostrarDetalle = false;
     document.body.style.overflow = '';
+  }
+
+  agregarAlCarrito(): void {
+    if (!this.productoSeleccionado) return;
+    if (this.productoSeleccionado.stock <= 0) {
+      this.toast.warning('Producto agotado');
+      return;
+    }
+    this.cartService.addToCart(this.productoSeleccionado, this.cantidadCarrito);
+    this.toast.success(`"${this.productoSeleccionado.nombre}" agregado al carrito`);
+    this.cerrarDetalle();
   }
 
   consultarWhatsApp(nombre: string): void {

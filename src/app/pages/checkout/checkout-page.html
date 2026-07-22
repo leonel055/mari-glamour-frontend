@@ -1,0 +1,61 @@
+<div class="checkout-page">
+  @if ((items$ | async); as items) {
+    @if (items.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon"><i class="bi bi-cart-x"></i></div>
+        <h3 class="empty-title">Carrito vacio</h3>
+        <p class="empty-text">Agrega productos antes de finalizar la compra</p>
+        <a routerLink="/catalogo" class="empty-btn">Ir al catalogo</a>
+      </div>
+    } @else {
+      <div class="page-header">
+        <h1 class="page-title">Finalizar compra</h1>
+        <p class="page-sub">Proximamente podras pagar con Mercado Pago</p>
+      </div>
+
+      <div class="checkout-summary">
+        <h3 class="summary-title">Resumen del pedido</h3>
+        @for (item of items; track item.productoId) {
+          <div class="summary-item">
+            <div class="summary-item-img">
+              @if (item.imagen) {
+                <img [src]="imagenUrl(item.imagen)" [alt]="item.nombre" />
+              } @else {
+                <div class="summary-item-img-placeholder"><i class="bi bi-box-seam"></i></div>
+              }
+            </div>
+            <div class="summary-item-body">
+              <span class="summary-item-name">{{ item.nombre }}</span>
+              <span class="summary-item-qty">x{{ item.cantidad }}</span>
+            </div>
+            <span class="summary-item-price">{{ formatoPrecio(item.precio * item.cantidad) }}</span>
+          </div>
+        }
+        <div class="summary-total">
+          <span>Total</span>
+          <span class="summary-total-value">{{ formatoPrecio((subtotal$ | async) ?? 0) }}</span>
+        </div>
+      </div>
+
+      <div class="checkout-payment">
+        <div class="payment-placeholder">
+          <i class="bi bi-credit-card-2-front"></i>
+          <h3>Metodo de pago proximamente</h3>
+          <p>Estamos trabajando para ofrecerte Mercado Pago y otras opciones de pago seguro.</p>
+          <div class="payment-badges">
+            <span class="payment-badge"><i class="bi bi-credit-card"></i> Tarjeta</span>
+            <span class="payment-badge"><i class="bi bi-bank2"></i> Transferencia</span>
+            <span class="payment-badge"><i class="bi bi-cash"></i> Efectivo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-actions">
+        <a routerLink="/carrito" class="btn-back">
+          <i class="bi bi-arrow-left"></i>
+          Volver al carrito
+        </a>
+      </div>
+    }
+  }
+</div>

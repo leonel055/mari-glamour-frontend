@@ -1,0 +1,80 @@
+<div class="cart-page">
+  <div class="page-header">
+    <h1 class="page-title">Tu Carrito</h1>
+    <p class="page-sub">Revisa tus productos antes de finalizar</p>
+  </div>
+
+  @if ((items$ | async); as items) {
+    @if (items.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon"><i class="bi bi-cart-x"></i></div>
+        <h3 class="empty-title">Carrito vacio</h3>
+        <p class="empty-text">Todavia no agregaste productos</p>
+        <a routerLink="/catalogo" class="empty-btn">Ir al catalogo</a>
+      </div>
+    } @else {
+      <div class="cart-items">
+        @for (item of items; track item.productoId) {
+          <div class="cart-item">
+            <div class="cart-item-img">
+              @if (item.imagen) {
+                <img [src]="imagenUrl(item.imagen)" [alt]="item.nombre" />
+              } @else {
+                <div class="cart-item-img-placeholder"><i class="bi bi-box-seam"></i></div>
+              }
+            </div>
+            <div class="cart-item-body">
+              <div class="cart-item-top">
+                <div>
+                  @if (item.marca) {
+                    <span class="cart-item-marca">{{ item.marca }}</span>
+                  }
+                  <h4 class="cart-item-nombre">{{ item.nombre }}</h4>
+                </div>
+                <button class="cart-item-remove" (click)="removeItem(item.productoId)" title="Eliminar">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+              <div class="cart-item-bottom">
+                <div class="cart-item-qty">
+                  <button class="qty-btn" (click)="updateCantidad(item, -1)" [disabled]="item.cantidad <= 1">
+                    <i class="bi bi-dash"></i>
+                  </button>
+                  <span class="qty-value">{{ item.cantidad }}</span>
+                  <button class="qty-btn" (click)="updateCantidad(item, 1)" [disabled]="item.cantidad >= item.stock">
+                    <i class="bi bi-plus"></i>
+                  </button>
+                </div>
+                <div class="cart-item-precio">
+                  <span class="cart-item-unit">{{ formatoPrecio(item.precio) }} c/u</span>
+                  <span class="cart-item-subtotal">{{ formatoPrecio(item.precio * item.cantidad) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-total-row">
+          <span class="cart-total-label">Total</span>
+          <span class="cart-total-value">{{ formatoPrecio((subtotal$ | async) ?? 0) }}</span>
+        </div>
+        <div class="cart-actions">
+          <a routerLink="/checkout" class="btn-checkout">
+            <i class="bi bi-credit-card"></i>
+            Finalizar compra
+          </a>
+          <button class="btn-clear" (click)="clearCart()">
+            <i class="bi bi-trash3"></i>
+            Vaciar carrito
+          </button>
+        </div>
+        <a routerLink="/catalogo" class="cart-continue">
+          <i class="bi bi-arrow-left"></i>
+          Seguir comprando
+        </a>
+      </div>
+    }
+  }
+</div>

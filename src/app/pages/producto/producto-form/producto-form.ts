@@ -45,7 +45,7 @@ export class ProductoForm implements OnInit {
       this.productoService.listar().subscribe((productos) => {
         const encontrado = productos.find((p) => p.id === this.id);
         if (encontrado) {
-          this.producto = encontrado;
+          this.producto = { ...encontrado, stock: encontrado.stock ?? 0 };
           this.previewUrl = encontrado.imagen || '';
         }
         this.cdr.detectChanges();
@@ -77,6 +77,9 @@ export class ProductoForm implements OnInit {
   }
 
   onSubmit(): void {
+    this.producto.stock = Number(this.producto.stock) || 0;
+    this.producto.precio = Number(this.producto.precio) || 0;
+
     if (!this.producto.nombre) {
       this.toast.warning('Completa el nombre del producto');
       return;

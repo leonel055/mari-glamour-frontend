@@ -120,19 +120,32 @@
         }
       </div>
 
+      @if (productoSeleccionado.stock > 0) {
+        <div class="modal-qty">
+          <span class="modal-qty-label">Cantidad</span>
+          <div class="qty-controls">
+            <button class="qty-btn" (click)="cantidadCarrito = cantidadCarrito > 1 ? cantidadCarrito - 1 : 1" [disabled]="cantidadCarrito <= 1">
+              <i class="bi bi-dash"></i>
+            </button>
+            <span class="qty-value">{{ cantidadCarrito }}</span>
+            <button class="qty-btn" (click)="cantidadCarrito = cantidadCarrito < productoSeleccionado.stock ? cantidadCarrito + 1 : productoSeleccionado.stock" [disabled]="cantidadCarrito >= productoSeleccionado.stock">
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
+      }
+
       <div class="modal-actions">
+        <button class="modal-btn-cart" [disabled]="productoSeleccionado.stock <= 0" (click)="agregarAlCarrito()">
+          <i class="bi bi-cart-plus"></i>
+          {{ productoSeleccionado.stock > 0 ? 'Agregar al carrito' : 'Agotado' }}
+        </button>
+
         <button class="modal-btn-wa" (click)="consultarWhatsApp(productoSeleccionado.nombre)">
           <i class="bi bi-whatsapp"></i>
           Consultar por WhatsApp
         </button>
-
-        <!-- Futuro: Agregar al carrito / Favoritos -->
-        <button class="modal-btn-fav" disabled title="Proximamente">
-          <i class="bi bi-heart"></i>
-        </button>
       </div>
-
-      <p class="modal-future">Compra online proximamente</p>
     </div>
   </div>
 }

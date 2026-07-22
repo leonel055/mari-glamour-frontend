@@ -13,6 +13,15 @@
       <i class="bi bi-bag"></i>
       <span>Catalogo</span>
     </a>
+    <a routerLink="/carrito" routerLinkActive="active-link" class="pub-nav-link cart-link">
+      <i class="bi bi-cart3"></i>
+      @if (cartCount$ | async; as count) {
+        @if (count > 0) {
+          <span class="cart-badge">{{ count > 99 ? '99+' : count }}</span>
+        }
+      }
+      <span>Carrito</span>
+    </a>
     <a routerLink="/login" class="pub-nav-admin">
       <i class="bi bi-person-gear"></i>
     </a>
@@ -22,3 +31,23 @@
 <main class="pub-main">
   <router-outlet />
 </main>
+
+<!-- Toast container -->
+<div class="toast-container">
+  @for (toast of toasts$ | async; track toast.id) {
+    <div class="toast-slot" [class.toast-visible]="toast.visible" [class.toast-hiding]="!toast.visible">
+      <div class="toast-msg" [class.toast-success]="toast.type === 'success'"
+           [class.toast-error]="toast.type === 'error'"
+           [class.toast-info]="toast.type === 'info'"
+           [class.toast-warning]="toast.type === 'warning'">
+        @switch (toast.type) {
+          @case ('success') { <i class="bi bi-check-circle-fill"></i> }
+          @case ('error') { <i class="bi bi-exclamation-circle-fill"></i> }
+          @case ('warning') { <i class="bi bi-exclamation-triangle-fill"></i> }
+          @default { <i class="bi bi-info-circle-fill"></i> }
+        }
+        <span>{{ toast.message }}</span>
+      </div>
+    </div>
+  }
+</div>
