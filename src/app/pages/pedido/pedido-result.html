@@ -1,58 +1,57 @@
 <div class="result-page">
-  @if (cargando) {
-    <div class="result-loading">
-      <div class="spinner"></div>
-      <p>Cargando informacion del pedido...</p>
-    </div>
-  } @else {
-    @switch (resultado) {
-      @case ('exito') {
-        <div class="result-card success">
-          <div class="result-icon"><i class="bi bi-check-circle-fill"></i></div>
-          <h1 class="result-title">Pago exitoso</h1>
-          <p class="result-text">Gracias por tu compra, {{ pedido?.clienteNombre || 'cliente' }}.</p>
-          <p class="result-text">Recibiras la confirmacion por los datos proporcionados.</p>
-          @if (pedido) {
-            <div class="pedido-info">
-              <div class="pedido-row"><span>Pedido</span><span>#{{ pedido.id.slice(0, 8) }}</span></div>
-              <div class="pedido-row"><span>Total</span><span>{{ formatoPrecio(pedido.total) }}</span></div>
-              <div class="pedido-row"><span>Estado</span><span class="badge-pagado">PAGADO</span></div>
-            </div>
-          }
-        </div>
-      }
-      @case ('fracaso') {
-        <div class="result-card failure">
-          <div class="result-icon"><i class="bi bi-x-circle-fill"></i></div>
-          <h1 class="result-title">Pago rechazado</h1>
-          <p class="result-text">El pago no pudo completarse. Intenta de nuevo o usa otro medio.</p>
-        </div>
-      }
-      @case ('pendiente') {
-        <div class="result-card pending">
-          <div class="result-icon"><i class="bi bi-clock-fill"></i></div>
-          <h1 class="result-title">Pago pendiente</h1>
-          <p class="result-text">Tu pago esta siendo procesado. Te notificaremos cuando se confirme.</p>
-        </div>
-      }
+  @switch (resultado) {
+    @case ('exito') {
+      <div class="result-card success">
+        <div class="result-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <h1 class="result-title">Pago exitoso</h1>
+        <p class="result-text">Gracias por tu compra{{ pedido ? ', ' + pedido.clienteNombre : '' }}.</p>
+        <p class="result-text">Recibiras la confirmacion por los datos proporcionados.</p>
+        @if (cargando) {
+          <div class="pedido-loading">
+            <span class="spinner-xs"></span>
+            Cargando detalles del pedido...
+          </div>
+        }
+        @if (pedido) {
+          <div class="pedido-info">
+            <div class="pedido-row"><span>Pedido</span><span>#{{ pedido.id.slice(0, 8) }}</span></div>
+            <div class="pedido-row"><span>Total</span><span>{{ formatoPrecio(pedido.total) }}</span></div>
+            <div class="pedido-row"><span>Estado</span><span class="badge-pagado">PAGADO</span></div>
+          </div>
+        }
+      </div>
     }
-
-    <div class="result-actions">
-      <a routerLink="/catalogo" class="btn-result">
-        <i class="bi bi-bag"></i>
-        Seguir comprando
-      </a>
-      @if (resultado === 'exito') {
-        <a routerLink="/" class="btn-result-outline">
-          <i class="bi bi-house-door"></i>
-          Volver al inicio
-        </a>
-      } @else {
-        <a routerLink="/carrito" class="btn-result-outline">
-          <i class="bi bi-cart3"></i>
-          Ir al carrito
-        </a>
-      }
-    </div>
+    @case ('fracaso') {
+      <div class="result-card failure">
+        <div class="result-icon"><i class="bi bi-x-circle-fill"></i></div>
+        <h1 class="result-title">Pago rechazado</h1>
+        <p class="result-text">El pago no pudo completarse. Intenta de nuevo o usa otro medio.</p>
+      </div>
+    }
+    @case ('pendiente') {
+      <div class="result-card pending">
+        <div class="result-icon"><i class="bi bi-clock-fill"></i></div>
+        <h1 class="result-title">Pago pendiente</h1>
+        <p class="result-text">Tu pago esta siendo procesado. Te notificaremos cuando se confirme.</p>
+      </div>
+    }
   }
+
+  <div class="result-actions">
+    <a routerLink="/catalogo" class="btn-result">
+      <i class="bi bi-bag"></i>
+      Seguir comprando
+    </a>
+    @if (resultado === 'exito') {
+      <a routerLink="/" class="btn-result-outline">
+        <i class="bi bi-house-door"></i>
+        Volver al inicio
+      </a>
+    } @else {
+      <a routerLink="/carrito" class="btn-result-outline">
+        <i class="bi bi-cart3"></i>
+        Ir al carrito
+      </a>
+    }
+  </div>
 </div>
