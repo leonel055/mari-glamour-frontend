@@ -54,6 +54,10 @@ export class PedidoService {
     return this.http.post<CreatePreferenceResponse>(`${this.API}/create-preference`, req);
   }
 
+  confirmarPago(pedidoId: string, paymentId: string): Observable<any> {
+    return this.http.post(`${this.API}/confirm`, { pedidoId, paymentId });
+  }
+
   obtenerPedido(id: string): Observable<Pedido> {
     return this.http.get<Pedido>(`${this.API}/pedidos/${id}`);
   }
