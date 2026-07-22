@@ -12,6 +12,7 @@ export const routes: Routes = [
       { path: 'catalogo', loadComponent: () => import('./pages/catalogo/catalogo-page').then((m) => m.CatalogoPage) },
       { path: 'carrito', loadComponent: () => import('./pages/carrito/carrito-page').then((m) => m.CarritoPage) },
       { path: 'checkout', loadComponent: () => import('./pages/checkout/checkout-page').then((m) => m.CheckoutPage) },
+      { path: 'pedido/:id/:resultado', loadComponent: () => import('./pages/pedido/pedido-result').then((m) => m.PedidoResult) },
     ],
   },
   { path: 'login', loadComponent: () => import('./pages/login/login').then((m) => m.Login) },

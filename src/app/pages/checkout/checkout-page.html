@@ -10,7 +10,7 @@
     } @else {
       <div class="page-header">
         <h1 class="page-title">Finalizar compra</h1>
-        <p class="page-sub">Proximamente podras pagar con Mercado Pago</p>
+        <p class="page-sub">Completa tus datos y paga con Mercado Pago</p>
       </div>
 
       <div class="checkout-summary">
@@ -37,20 +37,39 @@
         </div>
       </div>
 
-      <div class="checkout-payment">
-        <div class="payment-placeholder">
-          <i class="bi bi-credit-card-2-front"></i>
-          <h3>Metodo de pago proximamente</h3>
-          <p>Estamos trabajando para ofrecerte Mercado Pago y otras opciones de pago seguro.</p>
-          <div class="payment-badges">
-            <span class="payment-badge"><i class="bi bi-credit-card"></i> Tarjeta</span>
-            <span class="payment-badge"><i class="bi bi-bank2"></i> Transferencia</span>
-            <span class="payment-badge"><i class="bi bi-cash"></i> Efectivo</span>
+      <div class="checkout-buyer">
+        <h3 class="summary-title">Tus datos</h3>
+        <div class="buyer-form">
+          <div class="form-group">
+            <label class="form-label">
+              <i class="bi bi-person"></i> Nombre *
+            </label>
+            <input type="text" class="form-control" [(ngModel)]="buyer.nombre" name="nombre" placeholder="Tu nombre completo" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="bi bi-envelope"></i> Email
+            </label>
+            <input type="email" class="form-control" [(ngModel)]="buyer.email" name="email" placeholder="tu@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="bi bi-telephone"></i> Telefono
+            </label>
+            <input type="tel" class="form-control" [(ngModel)]="buyer.telefono" name="telefono" placeholder="388 4 123456" />
           </div>
         </div>
       </div>
 
       <div class="checkout-actions">
+        <button class="btn-mp" (click)="pagarConMercadoPago()" [disabled]="procesando">
+          @if (procesando) {
+            <span class="spinner-sm"></span> Procesando...
+          } @else {
+            <i class="bi bi-credit-card"></i>
+            Pagar con Mercado Pago
+          }
+        </button>
         <a routerLink="/carrito" class="btn-back">
           <i class="bi bi-arrow-left"></i>
           Volver al carrito
