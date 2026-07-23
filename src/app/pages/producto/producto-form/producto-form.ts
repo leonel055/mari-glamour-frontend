@@ -29,6 +29,7 @@ export class ProductoForm implements OnInit {
   subiendo = false;
   previewUrl = '';
   archivoSeleccionado: File | null = null;
+  imagenesExtra: string[] = [];
 
   constructor(
     private productoService: ProductoService,
@@ -47,6 +48,7 @@ export class ProductoForm implements OnInit {
         if (encontrado) {
           this.producto = { ...encontrado, stock: encontrado.stock ?? 0 };
           this.previewUrl = encontrado.imagen || '';
+          this.imagenesExtra = (encontrado as any).imagenes?.map((i: any) => i.imagen) || [];
         }
         this.cdr.detectChanges();
       });
@@ -76,6 +78,27 @@ export class ProductoForm implements OnInit {
     this.producto.imagen = '';
   }
 
+  agregarImagenExtra(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    const file = input.files[0];
+    if (!file.type.match(/^image\/(jpeg|jpg|png|webp)$/)) {
+      this.toast.warning('Formato no valido. Usa JPG, PNG o WebP');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagenesExtra.push(reader.result as string);
+      this.cdr.detectChanges();
+    };
+    reader.readAsDataURL(file);
+    input.value = '';
+  }
+
+  eliminarImagenExtra(index: number): void {
+    this.imagenesExtra.splice(index, 1);
+  }
+
   onSubmit(): void {
     this.producto.stock = Number(this.producto.stock) || 0;
     this.producto.precio = Number(this.producto.precio) || 0;
@@ -89,13 +112,18 @@ export class ProductoForm implements OnInit {
       return;
     }
 
+    const payload = {
+      ...this.producto,
+      imagenes: this.imagenesExtra,
+    };
+
     if (this.archivoSeleccionado) {
       this.subiendo = true;
       this.cdr.detectChanges();
       this.productoService.subirImagen(this.archivoSeleccionado).subscribe({
         next: (res) => {
-          this.producto.imagen = res.url;
-          this.guardar();
+          payload.imagen = res.url;
+          this.guardar(payload);
         },
         error: () => {
           this.subiendo = false;
@@ -104,14 +132,14 @@ export class ProductoForm implements OnInit {
         },
       });
     } else {
-      this.guardar();
+      this.guardar(payload);
     }
   }
 
-  private guardar(): void {
+  private guardar(payload: any): void {
     const obs = this.esEdicion
-      ? this.productoService.editar(this.id, this.producto)
-      : this.productoService.crear(this.producto);
+      ? this.productoService.editar(this.id, payload)
+      : this.productoService.crear(payload);
     obs.subscribe({
       next: () => {
         this.subiendo = false;

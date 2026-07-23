@@ -8,6 +8,14 @@ export interface Producto {
   categoria?: string;
   stock: number;
   activo: boolean;
+  imagenes?: ProductoImagen[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface ProductoImagen {
+  id: string;
+  productoId: string;
+  imagen: string;
+  orden: number;
 }

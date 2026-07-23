@@ -25,6 +25,7 @@ export class CatalogoPage implements OnInit {
   productoSeleccionado: Producto | null = null;
   mostrarDetalle = false;
   cantidadCarrito = 1;
+  imagenActual = '';
 
   private readonly WHATSAPP_NUM = '5493884427062';
   private readonly SKELETON_COUNT = 6;
@@ -93,12 +94,17 @@ export class CatalogoPage implements OnInit {
     this.productoSeleccionado = producto;
     this.mostrarDetalle = true;
     this.cantidadCarrito = 1;
+    this.imagenActual = producto.imagen || '';
     document.body.style.overflow = 'hidden';
   }
 
   cerrarDetalle(): void {
     this.mostrarDetalle = false;
     document.body.style.overflow = '';
+  }
+
+  seleccionarImagen(img: string): void {
+    this.imagenActual = img;
   }
 
   agregarAlCarrito(): void {

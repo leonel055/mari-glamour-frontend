@@ -91,9 +91,19 @@
     </div>
 
     <div class="modal-body">
-      @if (productoSeleccionado.imagen) {
+      @if (imagenActual) {
         <div class="modal-img">
-          <img [src]="imagenUrl(productoSeleccionado.imagen)" [alt]="productoSeleccionado.nombre" />
+          <img [src]="imagenUrl(imagenActual)" [alt]="productoSeleccionado.nombre" />
+        </div>
+      }
+
+      @if (productoSeleccionado.imagenes?.length) {
+        <div class="modal-thumbs">
+          @for (img of productoSeleccionado.imagenes; track img.id) {
+            <button class="modal-thumb" [class.active]="imagenActual === img.imagen" (click)="seleccionarImagen(img.imagen)">
+              <img [src]="imagenUrl(img.imagen)" alt="Foto" />
+            </button>
+          }
         </div>
       }
 
