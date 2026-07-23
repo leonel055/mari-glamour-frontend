@@ -26,12 +26,23 @@ export class PedidoResult implements OnInit, OnDestroy {
 
     if (!pedidoId) return;
 
+    const stored = localStorage.getItem('ultimoPedido');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed.id === pedidoId) {
+          this.pedido = { id: parsed.id, clienteNombre: parsed.clienteNombre, total: parsed.total } as Pedido;
+        }
+      } catch (_) {}
+    }
+
     this.cargando = true;
     this.timeoutId = setTimeout(() => this.cargando = false, 4000);
 
     this.pedidoService.obtenerPedido(pedidoId).subscribe({
       next: (data) => {
         this.pedido = data;
+        localStorage.removeItem('ultimoPedido');
         this.cargando = false;
         if (this.timeoutId) clearTimeout(this.timeoutId);
       },

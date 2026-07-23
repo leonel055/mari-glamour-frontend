@@ -61,6 +61,12 @@ export class CheckoutPage {
     }).subscribe({
       next: (res) => {
         this.cartService.clearCart();
+        const total = items.reduce((sum, i) => sum + (i.precio ?? 0) * i.cantidad, 0);
+        localStorage.setItem('ultimoPedido', JSON.stringify({
+          id: res.pedidoId,
+          clienteNombre: this.buyer.nombre.trim(),
+          total,
+        }));
         window.location.href = res.initPoint;
       },
       error: (err) => {
