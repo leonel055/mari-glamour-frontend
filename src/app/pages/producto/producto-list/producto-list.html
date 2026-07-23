@@ -18,8 +18,8 @@
           @if (producto.imagen) {
             <div class="producto-img">
               <img [src]="imagenUrl(producto.imagen)" [alt]="producto.nombre" />
-              @if ((producto as any).imagenes?.length) {
-                <span class="producto-img-count"><i class="bi bi-images"></i> +{{ (producto as any).imagenes.length }}</span>
+              @if (producto.imagenes?.length) {
+                <span class="producto-img-count"><i class="bi bi-images"></i> +{{ producto.imagenes?.length }}</span>
               }
             </div>
           }
