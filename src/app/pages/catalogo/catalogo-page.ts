@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Producto, ProductoImagen } from '../../shared/interfaces/producto.interface';
+import { Producto } from '../../shared/interfaces/producto.interface';
 import { PublicService } from '../../services/public.service';
 import { CartService } from '../../services/cart.service';
 import { ToastService } from '../../core/services/toast.service';

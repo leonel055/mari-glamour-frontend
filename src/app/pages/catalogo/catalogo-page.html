@@ -97,11 +97,11 @@
         </div>
       }
 
-      @if (productoSeleccionado.imagenes?.length) {
+      @if (imagenesAdicionales.length > 0) {
         <div class="modal-thumbs">
-          @for (img of productoSeleccionado.imagenes; track img.id) {
-            <button class="modal-thumb" [class.active]="imagenActual === img.imagen" (click)="seleccionarImagen(img.imagen)">
-              <img [src]="imagenUrl(img.imagen)" alt="Foto" />
+          @for (img of imagenesAdicionales; track $index) {
+            <button class="modal-thumb" [class.active]="imagenActual === img" (click)="seleccionarImagen(img)">
+              <img [src]="imagenUrl(img)" alt="Foto" />
             </button>
           }
         </div>
