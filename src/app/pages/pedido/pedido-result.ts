@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { PedidoService, Pedido } from '../../services/pedido.service';
@@ -13,11 +13,10 @@ import { PedidoService, Pedido } from '../../services/pedido.service';
 export class PedidoResult implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private pedidoService = inject(PedidoService);
+  private cdr = inject(ChangeDetectorRef);
 
   resultado: 'exito' | 'fracaso' | 'pendiente' = 'exito';
   pedido: Pedido | null = null;
-  cargando = false;
-  private timeoutId: any;
 
   ngOnInit(): void {
     const segment = this.route.snapshot.url[this.route.snapshot.url.length - 1]?.path || 'exito';
@@ -31,31 +30,23 @@ export class PedidoResult implements OnInit, OnDestroy {
       try {
         const parsed = JSON.parse(stored);
         if (parsed.id === pedidoId) {
-          this.pedido = { id: parsed.id, clienteNombre: parsed.clienteNombre, total: parsed.total } as Pedido;
+          this.pedido = parsed as Pedido;
+          this.cdr.detectChanges();
         }
       } catch (_) {}
     }
-
-    this.cargando = true;
-    this.timeoutId = setTimeout(() => this.cargando = false, 4000);
 
     this.pedidoService.obtenerPedido(pedidoId).subscribe({
       next: (data) => {
         this.pedido = data;
         localStorage.removeItem('ultimoPedido');
-        this.cargando = false;
-        if (this.timeoutId) clearTimeout(this.timeoutId);
+        this.cdr.detectChanges();
       },
-      error: () => {
-        this.cargando = false;
-        if (this.timeoutId) clearTimeout(this.timeoutId);
-      },
+      error: () => {},
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.timeoutId) clearTimeout(this.timeoutId);
-  }
+  ngOnDestroy(): void {}
 
   formatoPrecio(precio: number | string | null): string {
     return new Intl.NumberFormat('es-AR', {

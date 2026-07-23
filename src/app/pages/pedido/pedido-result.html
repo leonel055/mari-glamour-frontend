@@ -6,12 +6,6 @@
         <h1 class="result-title">Pago exitoso</h1>
         <p class="result-text">Gracias por tu compra{{ pedido ? ', ' + pedido.clienteNombre : '' }}.</p>
         <p class="result-text">Recibiras la confirmacion por los datos proporcionados.</p>
-        @if (cargando) {
-          <div class="pedido-loading">
-            <span class="spinner-xs"></span>
-            Cargando detalles del pedido...
-          </div>
-        }
         @if (pedido) {
           <div class="pedido-info">
             <div class="pedido-row"><span>Pedido</span><span>#{{ pedido.id.slice(0, 8) }}</span></div>
