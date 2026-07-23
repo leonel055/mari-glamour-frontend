@@ -15,6 +15,10 @@ export class ProductoService {
     return this.http.get<Producto[]>(this.API);
   }
 
+  obtener(id: string): Observable<Producto> {
+    return this.http.get<Producto>(`${this.API}/${id}`);
+  }
+
   crear(producto: Partial<Producto>): Observable<Producto> {
     return this.http.post<Producto>(this.API, producto);
   }

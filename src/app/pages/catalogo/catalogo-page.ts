@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Producto } from '../../shared/interfaces/producto.interface';
+import { Producto, ProductoImagen } from '../../shared/interfaces/producto.interface';
 import { PublicService } from '../../services/public.service';
 import { CartService } from '../../services/cart.service';
 import { ToastService } from '../../core/services/toast.service';
@@ -23,6 +23,7 @@ export class CatalogoPage implements OnInit {
   animados = new Set<string>();
 
   productoSeleccionado: Producto | null = null;
+  imagenesAdicionales: string[] = [];
   mostrarDetalle = false;
   cantidadCarrito = 1;
   imagenActual = '';
@@ -95,6 +96,9 @@ export class CatalogoPage implements OnInit {
     this.mostrarDetalle = true;
     this.cantidadCarrito = 1;
     this.imagenActual = producto.imagen || '';
+    this.imagenesAdicionales = (producto as any).imagenes?.length
+      ? (producto as any).imagenes.map((i: any) => i.imagen)
+      : [];
     document.body.style.overflow = 'hidden';
   }
 

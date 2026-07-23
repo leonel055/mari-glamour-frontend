@@ -43,14 +43,17 @@ export class ProductoForm implements OnInit {
     this.id = this.route.snapshot.params['id'];
     if (this.id) {
       this.esEdicion = true;
-      this.productoService.listar().subscribe((productos) => {
-        const encontrado = productos.find((p) => p.id === this.id);
-        if (encontrado) {
-          this.producto = { ...encontrado, stock: encontrado.stock ?? 0 };
-          this.previewUrl = encontrado.imagen || '';
-          this.imagenesExtra = (encontrado as any).imagenes?.map((i: any) => i.imagen) || [];
-        }
-        this.cdr.detectChanges();
+      this.productoService.obtener(this.id).subscribe({
+        next: (producto) => {
+          this.producto = { ...producto, stock: producto.stock ?? 0 };
+          this.previewUrl = producto.imagen || '';
+          this.imagenesExtra = (producto as any).imagenes?.map((i: any) => i.imagen) || [];
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.toast.error('Error al cargar producto');
+          this.router.navigate(['/admin/productos']);
+        },
       });
     }
   }
