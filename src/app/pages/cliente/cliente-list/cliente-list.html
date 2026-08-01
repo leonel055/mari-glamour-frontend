@@ -15,7 +15,7 @@
     <div class="list-group">
       @for (cliente of clientes; track cliente.id) {
         <div class="cliente-card-wrapper">
-          <a [routerLink]="['/clientes/editar', cliente.id]" class="cliente-card">
+          <a [routerLink]="['/admin/clientes/editar', cliente.id]" class="cliente-card">
             <div class="cliente-avatar">
               <i class="bi bi-person"></i>
             </div>

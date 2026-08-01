@@ -15,7 +15,7 @@
     <div class="servicios-grid">
       @for (servicio of servicios; track servicio.id) {
         <div class="servicio-card-wrapper">
-          <a [routerLink]="['/servicios/editar', servicio.id]" class="servicio-card">
+          <a [routerLink]="['/admin/servicios/editar', servicio.id]" class="servicio-card">
             <div class="servicio-precio">{{ formatearPrecio(servicio.precio) }}</div>
             <div class="servicio-nombre">{{ servicio.nombre }}</div>
             <div class="servicio-duracion">
