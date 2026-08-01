@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PublicService } from '../../services/public.service';
@@ -20,6 +20,7 @@ interface DiaReserva {
 })
 export class ReservaPage implements OnInit {
   private publicService = inject(PublicService);
+  private cdr = inject(ChangeDetectorRef);
 
   servicios: Servicio[] = [];
   seleccionados: string[] = [];
@@ -31,6 +32,7 @@ export class ReservaPage implements OnInit {
   clienteWhatsApp = '';
   observaciones = '';
   paso = 1;
+  cargandoServicios = true;
   cargandoHorarios = false;
   procesando = false;
   error = '';
@@ -39,9 +41,17 @@ export class ReservaPage implements OnInit {
     this.publicService.getServicios().subscribe({
       next: (data) => {
         this.servicios = data;
+        this.cargandoServicios = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.cargandoServicios = false;
+        this.error = 'No se pudieron cargar los servicios. Recargá la pagina.';
+        this.cdr.detectChanges();
       },
     });
     this.generarDias();
+    this.cdr.detectChanges();
   }
 
   private generarDias(): void {
@@ -97,6 +107,7 @@ export class ReservaPage implements OnInit {
     }
     this.horaSeleccionada = '';
     this.horarios = [];
+    this.cdr.detectChanges();
   }
 
   esServicioSeleccionado(id: string): boolean {
@@ -144,6 +155,7 @@ export class ReservaPage implements OnInit {
   cargarHorarios(): void {
     if (this.seleccionados.length === 0) return;
     this.cargandoHorarios = true;
+    this.cdr.detectChanges();
     this.publicService.getDisponibilidad(this.fechaSeleccionada, this.seleccionados).subscribe({
       next: (horarios) => {
         const hoy = new Date();
@@ -155,10 +167,12 @@ export class ReservaPage implements OnInit {
           return hh * 60 + mm > minutosAhora;
         });
         this.cargandoHorarios = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.cargandoHorarios = false;
         this.horarios = [];
+        this.cdr.detectChanges();
       },
     });
   }

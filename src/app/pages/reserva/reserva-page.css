@@ -317,6 +317,16 @@
   font-size: 0.82rem;
 }
 
+.spinner-load {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ece5de;
+  border-top-color: #B08A6A;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
 .horarios-empty {
   text-align: center;
   padding: 30px 10px;

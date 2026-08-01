@@ -34,26 +34,32 @@
     <section class="reserva-section">
       <h3 class="section-title">Elegi tus servicios</h3>
       <p class="section-sub">Podes combinar varios servicios</p>
-      <div class="servicios-grid">
-        @for (s of servicios; track s.id) {
-          <button
-            class="servicio-card"
-            [class.selected]="esServicioSeleccionado(s.id)"
-            (click)="toggleServicio(s.id)"
-          >
-            <div class="servicio-card-body">
-              <span class="servicio-card-nombre">{{ s.nombre }}</span>
-              <span class="servicio-card-meta">
-                <i class="bi bi-clock"></i> {{ duracionLabel(s.duracion) }}
+      @if (cargandoServicios) {
+        <div class="horarios-cargando">
+          <span class="spinner-load"></span> Cargando servicios...
+        </div>
+      } @else {
+        <div class="servicios-grid">
+          @for (s of servicios; track s.id) {
+            <button
+              class="servicio-card"
+              [class.selected]="esServicioSeleccionado(s.id)"
+              (click)="toggleServicio(s.id)"
+            >
+              <div class="servicio-card-body">
+                <span class="servicio-card-nombre">{{ s.nombre }}</span>
+                <span class="servicio-card-meta">
+                  <i class="bi bi-clock"></i> {{ duracionLabel(s.duracion) }}
+                </span>
+              </div>
+              <span class="servicio-card-precio">{{ formatoPrecio(s.precio) }}</span>
+              <span class="servicio-card-check" [class.visible]="esServicioSeleccionado(s.id)">
+                <i class="bi bi-check-lg"></i>
               </span>
-            </div>
-            <span class="servicio-card-precio">{{ formatoPrecio(s.precio) }}</span>
-            <span class="servicio-card-check" [class.visible]="esServicioSeleccionado(s.id)">
-              <i class="bi bi-check-lg"></i>
-            </span>
-          </button>
-        }
-      </div>
+            </button>
+          }
+        </div>
+      }
       <div class="wizard-nav">
         <button class="btn-next" [disabled]="!puedeAvanzarPaso1()" (click)="irPaso2()">
           Continuar <i class="bi bi-arrow-right"></i>
@@ -81,7 +87,7 @@
 
       @if (cargandoHorarios) {
         <div class="horarios-cargando">
-          <span class="spinner-sm"></span> Buscando horarios...
+          <span class="spinner-load"></span> Buscando horarios...
         </div>
       } @else if (horarios.length === 0) {
         <div class="horarios-empty">
