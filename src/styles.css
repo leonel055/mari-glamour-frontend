@@ -122,6 +122,11 @@ h1, h2, h3, h4, h5, h6 {
   color: #C62828;
 }
 
+.badge-reprogramado {
+  background-color: #EDE7F6;
+  color: #5E35B1;
+}
+
 .form-control, .form-select {
   border-radius: var(--radius-sm);
   border: 1.5px solid var(--border);

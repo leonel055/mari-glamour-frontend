@@ -6,6 +6,22 @@ import { Curso } from '../shared/interfaces/curso.interface';
 import { Producto } from '../shared/interfaces/producto.interface';
 import { environment } from '../../environments/environment';
 
+export interface ReservaCrear {
+  servicioIds: string[];
+  fecha: string;
+  horaInicio: string;
+  clienteNombre: string;
+  clienteWhatsApp?: string;
+  observaciones?: string;
+}
+
+export interface ReservaResponse {
+  turnoId: string;
+  preferenceId: string;
+  initPoint: string;
+  montoSenia: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class PublicService {
   private readonly API = `${environment.apiBase}/public`;
@@ -28,5 +44,17 @@ export class PublicService {
     return this.http.get<string[]>(`${this.API}/disponibilidad`, {
       params: { fecha, servicioIds: servicioIds.join(',') },
     });
+  }
+
+  crearReserva(req: ReservaCrear): Observable<ReservaResponse> {
+    return this.http.post<ReservaResponse>(`${this.API}/reservas`, req);
+  }
+
+  confirmarReserva(turnoId: string, paymentId: string): Observable<any> {
+    return this.http.post(`${this.API}/reservas/confirmar`, { turnoId, paymentId });
+  }
+
+  obtenerReserva(id: string): Observable<any> {
+    return this.http.get(`${this.API}/reservas/${id}`);
   }
 }

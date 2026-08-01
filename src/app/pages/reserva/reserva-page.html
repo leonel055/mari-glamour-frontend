@@ -1,0 +1,221 @@
+<div class="reserva-page">
+  <div class="page-header">
+    <h1 class="page-title">Reservar turno online</h1>
+    <p class="page-sub">Abona una seña del 50% y asegura tu turno</p>
+  </div>
+
+  <div class="steps">
+    <div class="step" [class.active]="paso >= 1" [class.done]="paso > 1">
+      <span class="step-num">1</span>
+      <span class="step-label">Servicio</span>
+    </div>
+    <div class="step-line" [class.done]="paso > 2"></div>
+    <div class="step" [class.active]="paso >= 2" [class.done]="paso > 2">
+      <span class="step-num">2</span>
+      <span class="step-label">Fecha</span>
+    </div>
+    <div class="step-line" [class.done]="paso > 3"></div>
+    <div class="step" [class.active]="paso >= 3" [class.done]="paso > 3">
+      <span class="step-num">3</span>
+      <span class="step-label">Datos</span>
+    </div>
+    <div class="step-line" [class.done]="paso > 4"></div>
+    <div class="step" [class.active]="paso >= 4">
+      <span class="step-num">4</span>
+      <span class="step-label">Confirmar</span>
+    </div>
+  </div>
+
+  @if (error) {
+    <div class="reserva-error"><i class="bi bi-exclamation-circle"></i> {{ error }}</div>
+  }
+
+  @if (paso === 1) {
+    <section class="reserva-section">
+      <h3 class="section-title">Elegi tus servicios</h3>
+      <p class="section-sub">Podes combinar varios servicios</p>
+      <div class="servicios-grid">
+        @for (s of servicios; track s.id) {
+          <button
+            class="servicio-card"
+            [class.selected]="esServicioSeleccionado(s.id)"
+            (click)="toggleServicio(s.id)"
+          >
+            <div class="servicio-card-body">
+              <span class="servicio-card-nombre">{{ s.nombre }}</span>
+              <span class="servicio-card-meta">
+                <i class="bi bi-clock"></i> {{ duracionLabel(s.duracion) }}
+              </span>
+            </div>
+            <span class="servicio-card-precio">{{ formatoPrecio(s.precio) }}</span>
+            <span class="servicio-card-check" [class.visible]="esServicioSeleccionado(s.id)">
+              <i class="bi bi-check-lg"></i>
+            </span>
+          </button>
+        }
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-next" [disabled]="!puedeAvanzarPaso1()" (click)="irPaso2()">
+          Continuar <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+  }
+
+  @if (paso === 2) {
+    <section class="reserva-section">
+      <h3 class="section-title">Elegi fecha y horario</h3>
+      <div class="dias-row">
+        @for (d of dias; track d.fecha) {
+          <button
+            class="dia-card"
+            [class.selected]="fechaSeleccionada === d.fecha"
+            (click)="seleccionarDia(d.fecha)"
+          >
+            <span class="dia-nombre">{{ d.nombre }}</span>
+            <span class="dia-num">{{ d.diaNum }}</span>
+            <span class="dia-mes">{{ d.mes }}</span>
+          </button>
+        }
+      </div>
+
+      @if (cargandoHorarios) {
+        <div class="horarios-cargando">
+          <span class="spinner-sm"></span> Buscando horarios...
+        </div>
+      } @else if (horarios.length === 0) {
+        <div class="horarios-empty">
+          <i class="bi bi-calendar-x"></i>
+          <p>No hay horarios disponibles para esta fecha y servicios.</p>
+        </div>
+      } @else {
+        <div class="horarios-grid">
+          @for (hora of horarios; track hora) {
+            <button
+              class="hora-card"
+              [class.selected]="horaSeleccionada === hora"
+              (click)="seleccionarHora(hora)"
+            >
+              {{ formatearHora(hora) }}
+            </button>
+          }
+        </div>
+      }
+
+      <div class="wizard-nav">
+        <button class="btn-prev" (click)="irPaso1()">
+          <i class="bi bi-arrow-left"></i> Atras
+        </button>
+        <button class="btn-next" [disabled]="!puedeAvanzarPaso2()" (click)="irPaso3()">
+          Continuar <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+  }
+
+  @if (paso === 3) {
+    <section class="reserva-section">
+      <h3 class="section-title">Tus datos</h3>
+      <div class="datos-form">
+        <div class="form-group">
+          <label class="form-label"><i class="bi bi-person"></i> Nombre *</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="clienteNombre"
+            name="nombre"
+            placeholder="Tu nombre completo"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="bi bi-whatsapp"></i> WhatsApp (recomendado)</label>
+          <input
+            type="tel"
+            class="form-control"
+            [(ngModel)]="clienteWhatsApp"
+            name="whatsapp"
+            placeholder="388 4 123456"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="bi bi-chat-left-text"></i> Observaciones</label>
+          <textarea
+            class="form-control"
+            [(ngModel)]="observaciones"
+            name="obs"
+            rows="3"
+            placeholder="Ej: escarchado, color rojo, etc. (opcional)"
+          ></textarea>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-prev" (click)="irPaso2()">
+          <i class="bi bi-arrow-left"></i> Atras
+        </button>
+        <button class="btn-next" [disabled]="!puedeAvanzarPaso3()" (click)="irPaso4()">
+          Continuar <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+  }
+
+  @if (paso === 4) {
+    <section class="reserva-section">
+      <h3 class="section-title">Confirmar reserva</h3>
+
+      <div class="resumen-card">
+        <div class="resumen-row">
+          <span class="resumen-label"><i class="bi bi-scissors"></i> Servicios</span>
+          <span class="resumen-value">
+            {{ seleccionados.length }} ({{ duracionLabel(duracionTotal) }})
+          </span>
+        </div>
+        <div class="resumen-row">
+          <span class="resumen-label"><i class="bi bi-calendar-event"></i> Fecha</span>
+          <span class="resumen-value">{{ formatearFechaLarga(fechaSeleccionada) }}</span>
+        </div>
+        <div class="resumen-row">
+          <span class="resumen-label"><i class="bi bi-clock"></i> Horario</span>
+          <span class="resumen-value">{{ formatearHora(horaSeleccionada) }}</span>
+        </div>
+        <div class="resumen-row">
+          <span class="resumen-label"><i class="bi bi-person"></i> Nombre</span>
+          <span class="resumen-value">{{ clienteNombre }}</span>
+        </div>
+        @if (clienteWhatsApp) {
+          <div class="resumen-row">
+            <span class="resumen-label"><i class="bi bi-whatsapp"></i> WhatsApp</span>
+            <span class="resumen-value">{{ clienteWhatsApp }}</span>
+          </div>
+        }
+        <div class="resumen-divider"></div>
+        <div class="resumen-row">
+          <span class="resumen-label">Total servicios</span>
+          <span class="resumen-value">{{ formatoPrecio(totalServicios) }}</span>
+        </div>
+        <div class="resumen-row senia">
+          <span class="resumen-label"><i class="bi bi-shield-check"></i> Seña (50%)</span>
+          <span class="resumen-value senia-value">{{ formatoPrecio(montoSenia) }}</span>
+        </div>
+        <p class="resumen-nota">
+          <i class="bi bi-hourglass-split"></i>
+          Tendras 10 minutos para completar el pago. El saldo se abona en el local.
+        </p>
+      </div>
+
+      <div class="wizard-nav">
+        <button class="btn-prev" (click)="irPaso3()">
+          <i class="bi bi-arrow-left"></i> Atras
+        </button>
+        <button class="btn-mp" (click)="confirmar()" [disabled]="procesando">
+          @if (procesando) {
+            <span class="spinner-sm"></span> Creando pago...
+          } @else {
+            <i class="bi bi-credit-card"></i>
+            Pagar seña {{ formatoPrecio(montoSenia) }} con Mercado Pago
+          }
+        </button>
+      </div>
+    </section>
+  }
+</div>

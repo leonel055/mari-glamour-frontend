@@ -135,3 +135,42 @@
   margin-right: 6px;
   width: 16px;
 }
+
+.turno-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #f5f0eb;
+  color: #6B5C52;
+}
+
+.meta-badge.online {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.meta-badge.whatsapp {
+  background: #E0F7E9;
+  color: #128C7E;
+}
+
+.meta-badge.senia {
+  background: #FFF8E1;
+  color: #B8860B;
+}
+
+.meta-badge.senia.pagada {
+  background: #E8F5E9;
+  color: #2E7D32;
+}

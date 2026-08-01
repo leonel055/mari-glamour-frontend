@@ -1,0 +1,75 @@
+<div class="result-page">
+  @switch (resultado) {
+    @case ('exito') {
+      <div class="result-card success">
+        <div class="result-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <h1 class="result-title">Reserva confirmada</h1>
+        <p class="result-text">
+          Gracias{{ reserva?.clienteNombre ? ', ' + reserva.clienteNombre : '' }}! Tu seña fue
+          acreditada y el turno quedo reservado.
+        </p>
+        @if (reserva) {
+          <div class="reserva-info">
+            <div class="reserva-row">
+              <span>Servicios</span>
+              <span>{{ serviciosNombres }}</span>
+            </div>
+            <div class="reserva-row">
+              <span>Fecha</span>
+              <span>{{ reserva.fecha ? formatearFecha(reserva.fecha) : reserva.fecha }}</span>
+            </div>
+            <div class="reserva-row">
+              <span>Horario</span>
+              <span>{{ formatearHora(reserva.horaInicio) }} hs</span>
+            </div>
+            @if (reserva.montoSenia) {
+              <div class="reserva-row">
+                <span>Seña abonada</span>
+                <span>{{ formatoPrecio(reserva.montoSenia) }}</span>
+              </div>
+            }
+            <div class="reserva-row">
+              <span>Estado</span>
+              <span class="badge-confirmado">CONFIRMADO</span>
+            </div>
+          </div>
+          <p class="reserva-nota">
+            <i class="bi bi-info-circle"></i>
+            Te enviaremos un recordatorio por WhatsApp. El saldo se abona en el local.
+          </p>
+        }
+      </div>
+    }
+    @case ('fracaso') {
+      <div class="result-card failure">
+        <div class="result-icon"><i class="bi bi-x-circle-fill"></i></div>
+        <h1 class="result-title">Pago no completado</h1>
+        <p class="result-text">
+          El pago de la seña no pudo completarse. Tu reserva no fue confirmada y el horario
+          quedo liberado. Intenta reservar de nuevo.
+        </p>
+      </div>
+    }
+    @case ('pendiente') {
+      <div class="result-card pending">
+        <div class="result-icon"><i class="bi bi-clock-fill"></i></div>
+        <h1 class="result-title">Pago pendiente</h1>
+        <p class="result-text">
+          Tu pago esta siendo procesado. Cuando se acredite tu seña, el turno quedara
+          confirmado automaticamente.
+        </p>
+      </div>
+    }
+  }
+
+  <div class="result-actions">
+    <a routerLink="/reservar" class="btn-result">
+      <i class="bi bi-calendar-plus"></i>
+      Reservar otro turno
+    </a>
+    <a routerLink="/" class="btn-result-outline">
+      <i class="bi bi-house-door"></i>
+      Volver al inicio
+    </a>
+  </div>
+</div>

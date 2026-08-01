@@ -44,11 +44,28 @@
           <div class="turno-body">
             <div class="turno-cliente">
               <i class="bi bi-person"></i>
-              {{ turno.Cliente?.nombre || 'Sin cliente' }}
+              {{ turno.Cliente?.nombre || turno.clienteNombre || 'Sin cliente' }}
             </div>
             <div class="turno-servicio">
               <i class="bi bi-brush"></i>
               {{ getServicios(turno) || 'Sin servicio' }}
+            </div>
+            <div class="turno-meta">
+              @if (turno.metodoReserva && turno.metodoReserva !== 'MANUAL') {
+                <span class="meta-badge" [class.online]="turno.metodoReserva === 'ONLINE'" [class.whatsapp]="turno.metodoReserva === 'WHATSAPP'">
+                  @if (turno.metodoReserva === 'ONLINE') {
+                    <i class="bi bi-globe2"></i> Online
+                  } @else {
+                    <i class="bi bi-whatsapp"></i> WhatsApp
+                  }
+                </span>
+              }
+              @if ((turno.montoSenia ?? 0) > 0) {
+                <span class="meta-badge senia" [class.pagada]="turno.seniaPagada">
+                  <i class="bi bi-shield-check"></i>
+                  Seña ${{ turno.montoSenia }}{{ turno.seniaPagada ? ' (pagada)' : ' (pendiente)' }}
+                </span>
+              }
             </div>
           </div>
         </div>
