@@ -30,6 +30,7 @@ export class ReservaPage implements OnInit {
   horaSeleccionada = '';
   clienteNombre = '';
   clienteWhatsApp = '';
+  clienteEmail = '';
   observaciones = '';
   paso = 1;
   cargandoServicios = true;
@@ -195,6 +196,7 @@ export class ReservaPage implements OnInit {
       horaInicio: this.horaSeleccionada,
       clienteNombre: this.clienteNombre.trim(),
       clienteWhatsApp: this.clienteWhatsApp?.trim() || undefined,
+      clienteEmail: this.clienteEmail?.trim() || undefined,
       observaciones: this.observaciones?.trim() || undefined,
     }).subscribe({
       next: (res) => {

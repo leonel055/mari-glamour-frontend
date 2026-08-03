@@ -12,6 +12,7 @@ export interface ReservaCrear {
   horaInicio: string;
   clienteNombre: string;
   clienteWhatsApp?: string;
+  clienteEmail?: string;
   observaciones?: string;
 }
 

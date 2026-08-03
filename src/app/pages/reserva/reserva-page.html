@@ -144,6 +144,16 @@
           />
         </div>
         <div class="form-group">
+          <label class="form-label"><i class="bi bi-envelope"></i> Email</label>
+          <input
+            type="email"
+            class="form-control"
+            [(ngModel)]="clienteEmail"
+            name="email"
+            placeholder="tucorreo@ejemplo.com"
+          />
+        </div>
+        <div class="form-group">
           <label class="form-label"><i class="bi bi-chat-left-text"></i> Observaciones</label>
           <textarea
             class="form-control"
@@ -192,6 +202,12 @@
           <div class="resumen-row">
             <span class="resumen-label"><i class="bi bi-whatsapp"></i> WhatsApp</span>
             <span class="resumen-value">{{ clienteWhatsApp }}</span>
+          </div>
+        }
+        @if (clienteEmail) {
+          <div class="resumen-row">
+            <span class="resumen-label"><i class="bi bi-envelope"></i> Email</span>
+            <span class="resumen-value">{{ clienteEmail }}</span>
           </div>
         }
         <div class="resumen-divider"></div>
