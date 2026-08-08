@@ -1,27 +1,28 @@
 <div class="reserva-page">
   <div class="page-header">
+    <div class="header-icon"><i class="bi bi-calendar2-heart"></i></div>
     <h1 class="page-title">Reservar turno online</h1>
     <p class="page-sub">Abona una seña del 50% y asegura tu turno</p>
   </div>
 
   <div class="steps">
     <div class="step" [class.active]="paso >= 1" [class.done]="paso > 1">
-      <span class="step-num">1</span>
+      <div class="step-num"><span class="num">1</span><i class="bi bi-check-lg check"></i></div>
       <span class="step-label">Servicio</span>
     </div>
     <div class="step-line" [class.done]="paso > 2"></div>
     <div class="step" [class.active]="paso >= 2" [class.done]="paso > 2">
-      <span class="step-num">2</span>
+      <div class="step-num"><span class="num">2</span><i class="bi bi-check-lg check"></i></div>
       <span class="step-label">Fecha</span>
     </div>
     <div class="step-line" [class.done]="paso > 3"></div>
     <div class="step" [class.active]="paso >= 3" [class.done]="paso > 3">
-      <span class="step-num">3</span>
+      <div class="step-num"><span class="num">3</span><i class="bi bi-check-lg check"></i></div>
       <span class="step-label">Datos</span>
     </div>
     <div class="step-line" [class.done]="paso > 4"></div>
     <div class="step" [class.active]="paso >= 4">
-      <span class="step-num">4</span>
+      <div class="step-num"><span class="num">4</span><i class="bi bi-check-lg check"></i></div>
       <span class="step-label">Confirmar</span>
     </div>
   </div>
@@ -41,7 +42,7 @@
       } @else {
         <div class="servicios-grid">
           @for (s of servicios; track s.id) {
-            <button
+              <button
               class="servicio-card"
               [class.selected]="esServicioSeleccionado(s.id)"
               (click)="toggleServicio(s.id)"
@@ -71,6 +72,7 @@
   @if (paso === 2) {
     <section class="reserva-section">
       <h3 class="section-title">Elegi fecha y horario</h3>
+      <br>
       <div class="dias-row">
         @for (d of dias; track d.fecha) {
           <button
@@ -180,12 +182,16 @@
       <h3 class="section-title">Confirmar reserva</h3>
 
       <div class="resumen-card">
-        <div class="resumen-row">
-          <span class="resumen-label"><i class="bi bi-scissors"></i> Servicios</span>
-          <span class="resumen-value">
-            {{ seleccionados.length }} ({{ duracionLabel(duracionTotal) }})
-          </span>
+        <div class="resumen-servicios">
+          @for (s of serviciosSeleccionados; track s.id) {
+            <div class="resumen-servicio">
+              <span class="resumen-servicio-nombre">{{ s.nombre }}</span>
+              <span class="resumen-servicio-meta">{{ duracionLabel(s.duracion) }}</span>
+              <span class="resumen-servicio-precio">{{ formatoPrecio(s.precio) }}</span>
+            </div>
+          }
         </div>
+        <div class="resumen-divider"></div>
         <div class="resumen-row">
           <span class="resumen-label"><i class="bi bi-calendar-event"></i> Fecha</span>
           <span class="resumen-value">{{ formatearFechaLarga(fechaSeleccionada) }}</span>
@@ -208,6 +214,12 @@
           <div class="resumen-row">
             <span class="resumen-label"><i class="bi bi-envelope"></i> Email</span>
             <span class="resumen-value">{{ clienteEmail }}</span>
+          </div>
+        }
+        @if (observaciones) {
+          <div class="resumen-row">
+            <span class="resumen-label"><i class="bi bi-chat-left-text"></i> Observaciones</span>
+            <span class="resumen-value">{{ observaciones }}</span>
           </div>
         }
         <div class="resumen-divider"></div>

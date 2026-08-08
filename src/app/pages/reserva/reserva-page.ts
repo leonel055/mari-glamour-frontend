@@ -99,6 +99,10 @@ export class ReservaPage implements OnInit {
       .reduce((sum, s) => sum + Number(s.duracion || 0), 0);
   }
 
+  get serviciosSeleccionados(): Servicio[] {
+    return this.servicios.filter((s) => this.seleccionados.includes(s.id));
+  }
+
   toggleServicio(id: string): void {
     const idx = this.seleccionados.indexOf(id);
     if (idx >= 0) {
@@ -133,6 +137,9 @@ export class ReservaPage implements OnInit {
 
   irPaso2(): void {
     this.paso = 2;
+    if (this.fechaSeleccionada && this.seleccionados.length > 0) {
+      this.cargarHorarios();
+    }
   }
 
   irPaso3(): void {

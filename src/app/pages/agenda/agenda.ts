@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Turno } from '../../shared/interfaces/turno.interface';
 import { TurnoService } from '../../services/turno.service';
+import { MpOauthService, MpEstado } from '../../services/mp-oauth.service';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-agenda',
@@ -15,12 +17,60 @@ export class Agenda implements OnInit {
   fechaSeleccionada: string = '';
   dias: { label: string; fecha: string; diaNum: number; diaSemana: string; esHoy: boolean }[] = [];
   offsetSemana = 0;
+  mpEstado: MpEstado | null = null;
+  mpCargando = false;
 
-  constructor(private turnoService: TurnoService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private turnoService: TurnoService,
+    private mpOauthService: MpOauthService,
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.generarSemana();
     this.seleccionarHoy();
+    this.verificarQueryMp();
+    this.cargarEstadoMp();
+  }
+
+  verificarQueryMp(): void {
+    const params = new URLSearchParams(window.location.search);
+    const resultado = params.get('mp');
+    if (resultado === 'conectado') {
+      this.toastService.success('Mercado Pago conectado correctamente.');
+    } else if (resultado === 'error') {
+      this.toastService.error('No se pudo conectar Mercado Pago. Intenta de nuevo.');
+    }
+    if (resultado) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('mp');
+      window.history.replaceState({}, '', url.pathname + url.search);
+    }
+  }
+
+  cargarEstadoMp(): void {
+    this.mpOauthService.getEstado().subscribe({
+      next: (estado) => {
+        this.mpEstado = estado;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  conectarMp(): void {
+    this.mpCargando = true;
+    this.cdr.detectChanges();
+    this.mpOauthService.getAuthorizeUrl().subscribe({
+      next: (res) => {
+        window.location.href = res.url;
+      },
+      error: () => {
+        this.mpCargando = false;
+        this.toastService.error('No se pudo iniciar la conexion con Mercado Pago.');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   generarSemana(): void {

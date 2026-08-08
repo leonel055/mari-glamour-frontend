@@ -1,6 +1,37 @@
 <div class="page-container">
   <h2 class="page-title">Agenda</h2>
 
+  <div class="mp-card" [class.connected]="mpEstado?.conectado">
+    @if (mpEstado?.conectado) {
+      <div class="mp-card-body">
+        <span class="mp-icon"><i class="bi bi-check-lg"></i></span>
+        <div class="mp-info">
+          <span class="mp-title">Mercado Pago conectado</span>
+          <span class="mp-sub">
+            Recibis senias {{ mpEstado?.liveMode ? 'en modo producción' : 'en modo prueba' }}
+          </span>
+        </div>
+        <button class="mp-reconnect" (click)="conectarMp()">Reconectar</button>
+      </div>
+    } @else {
+      <div class="mp-card-body">
+        <span class="mp-icon"><i class="bi bi-credit-card"></i></span>
+        <div class="mp-info">
+          <span class="mp-title">Conectá tu cuenta de Mercado Pago</span>
+          <span class="mp-sub">Para recibir las señas directamente en tu cuenta</span>
+        </div>
+        <button class="mp-btn" (click)="conectarMp()" [disabled]="mpCargando">
+          @if (mpCargando) {
+            <span class="mp-spinner"></span>
+          } @else {
+            <i class="bi bi-link-45deg"></i>
+          }
+          Conectar
+        </button>
+      </div>
+    }
+  </div>
+
   <div class="week-nav">
     <button class="week-arrow" (click)="semanaAnterior()">
       <i class="bi bi-chevron-left"></i>
