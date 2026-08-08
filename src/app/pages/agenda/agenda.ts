@@ -65,9 +65,10 @@ export class Agenda implements OnInit {
       next: (res) => {
         window.location.href = res.url;
       },
-      error: () => {
+      error: (err) => {
         this.mpCargando = false;
-        this.toastService.error('No se pudo iniciar la conexion con Mercado Pago.');
+        const detalle = err.error?.error || err.error?.message || '';
+        this.toastService.error(detalle || 'No se pudo iniciar la conexion con Mercado Pago.');
         this.cdr.detectChanges();
       },
     });
