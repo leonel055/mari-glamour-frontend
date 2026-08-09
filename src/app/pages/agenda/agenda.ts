@@ -39,8 +39,10 @@ export class Agenda implements OnInit {
     const resultado = params.get('mp');
     if (resultado === 'conectado') {
       this.toastService.success('Mercado Pago conectado correctamente.');
-    } else if (resultado === 'error') {
-      this.toastService.error('No se pudo conectar Mercado Pago. Intenta de nuevo.');
+    } else if (resultado && resultado.startsWith('error')) {
+      const idx = resultado.indexOf(':');
+      const detalle = idx >= 0 ? resultado.slice(idx + 1) : '';
+      this.toastService.error(detalle || 'No se pudo conectar Mercado Pago. Intenta de nuevo.');
     }
     if (resultado) {
       const url = new URL(window.location.href);
