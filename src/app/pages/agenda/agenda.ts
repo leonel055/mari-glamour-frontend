@@ -57,6 +57,13 @@ export class Agenda implements OnInit {
         this.mpEstado = estado;
         this.cdr.detectChanges();
       },
+      error: (err) => {
+        if (err.status === 401) {
+          this.irAlLogin();
+          return;
+        }
+        this.cdr.detectChanges();
+      },
     });
   }
 
@@ -69,11 +76,23 @@ export class Agenda implements OnInit {
       },
       error: (err) => {
         this.mpCargando = false;
+        if (err.status === 401) {
+          this.irAlLogin();
+          return;
+        }
         const detalle = err.error?.error || err.error?.message || '';
         this.toastService.error(detalle || 'No se pudo iniciar la conexion con Mercado Pago.');
         this.cdr.detectChanges();
       },
     });
+  }
+
+  private irAlLogin(): void {
+    localStorage.removeItem('token');
+    this.toastService.error('Tu sesion expiro. Volve a iniciar sesion.');
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 1200);
   }
 
   generarSemana(): void {
