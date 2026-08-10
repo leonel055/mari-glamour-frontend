@@ -213,6 +213,7 @@ export class ReservaPage implements OnInit {
           fecha: this.fechaSeleccionada,
           horaInicio: this.horaSeleccionada,
           montoSenia: res.montoSenia,
+          servicios: this.serviciosSeleccionados.map((s) => s.nombre),
         }));
         window.location.href = res.initPoint;
       },

@@ -48,6 +48,10 @@ export class ReservaResult implements OnInit {
 
   get serviciosNombres(): string {
     if (!this.reserva) return '';
+    const servicios = this.reserva.servicios;
+    if (Array.isArray(servicios) && servicios.length > 0) {
+      return servicios.join(' + ');
+    }
     const principal = this.reserva.Servicio?.nombre;
     const extra = this.reserva.servicioIds?.length > 1 ? ' + servicios' : '';
     return principal ? principal + extra : (this.reserva.servicioIds?.length || 0) + ' servicios';
