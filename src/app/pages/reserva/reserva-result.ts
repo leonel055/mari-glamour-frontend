@@ -50,7 +50,10 @@ export class ReservaResult implements OnInit {
     if (!this.reserva) return '';
     const servicios = this.reserva.servicios;
     if (Array.isArray(servicios) && servicios.length > 0) {
-      return servicios.join(' + ');
+      const nombres = servicios.map((s) =>
+        typeof s === 'string' ? s : s?.nombre
+      );
+      return nombres.filter(Boolean).join(' + ');
     }
     const principal = this.reserva.Servicio?.nombre;
     const extra = this.reserva.servicioIds?.length > 1 ? ' + servicios' : '';
